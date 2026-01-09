@@ -1,0 +1,107 @@
+'use client';
+
+import { useEffect, useRef } from 'react';
+import { X, Search } from 'lucide-react';
+import { AnimeItem } from '@/types/anime';
+import AnimeCard from './AnimeCard';
+
+interface SearchModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+  query: string;
+  onQueryChange: (query: string) => void;
+  results: AnimeItem[];
+}
+
+export default function SearchModal({
+  isOpen,
+  onClose,
+  query,
+  onQueryChange,
+  results,
+}: SearchModalProps) {
+  const inputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (isOpen) {
+      inputRef.current?.focus();
+    }
+  }, [isOpen]);
+
+  useEffect(() => {
+    const handleEscape = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    if (isOpen) {
+      document.addEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'hidden';
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleEscape);
+      document.body.style.overflow = 'unset';
+    };
+  }, [isOpen, onClose]);
+
+  if (!isOpen) return null;
+
+  return (
+    <div className="fixed inset-0 z-50 overflow-y-auto">
+      <div
+        className="fixed inset-0 bg-black/50 backdrop-blur-sm"
+        onClick={onClose}
+      />
+
+      <div className="relative min-h-screen flex items-start justify-center p-4 pt-20">
+        <div className="relative bg-white rounded-lg shadow-2xl w-full max-w-4xl">
+          <div className="sticky top-0 bg-white border-b border-gray-200 p-4 rounded-t-lg z-10">
+            <div className="flex items-center gap-3">
+              <Search className="text-gray-400" size={24} />
+              <input
+                ref={inputRef}
+                type="text"
+                value={query}
+                onChange={(e) => onQueryChange(e.target.value)}
+                placeholder="Search anime by name..."
+                className="flex-1 text-lg outline-none"
+              />
+              <button
+                onClick={onClose}
+                className="p-2 hover:bg-gray-100 rounded-full transition-colors"
+                aria-label="Close search"
+              >
+                <X size={24} />
+              </button>
+            </div>
+          </div>
+
+          <div className="p-6 max-h-[60vh] overflow-y-auto">
+            {query && results.length === 0 ? (
+              <p className="text-center text-gray-500 py-8">
+                No results found for "{query}"
+              </p>
+            ) : query && results.length > 0 ? (
+              <>
+                <p className="text-sm text-gray-600 mb-4">
+                  Found {results.length} result{results.length !== 1 ? 's' : ''}
+                </p>
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+                  {results.map((anime) => (
+                    <AnimeCard key={anime.id} anime={anime} />
+                  ))}
+                </div>
+              </>
+            ) : (
+              <p className="text-center text-gray-500 py-8">
+                Start typing to search anime...
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
