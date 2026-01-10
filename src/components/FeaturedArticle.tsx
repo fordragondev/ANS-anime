@@ -9,8 +9,8 @@ interface FeaturedArticleProps {
 
 export default function FeaturedArticle({ anime }: FeaturedArticleProps) {
   return (
-    <Link href={`/anime/${anime.id}`}>
-      <article className="relative w-full h-[400px] md:h-[500px] rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-shadow cursor-pointer mb-8">
+    <Link href={`/anime/${anime.id}`} className="focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-4 rounded-lg">
+      <article className="relative w-full h-[400px] md:h-[500px] rounded-lg overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 cursor-pointer mb-8 border-2 border-transparent hover:border-primary/30">
         <Image
           src={`https://placehold.co/1200x500/003DA5/FFFFFF?text=${encodeURIComponent(truncateText(anime.name, 30))}`}
           alt={anime.name}

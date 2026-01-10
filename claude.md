@@ -130,14 +130,6 @@ interface AnimeItem {
 }
 ```
 
-## Color Scheme
-
-- **Primary**: #003DA5 (Blue)
-- **Accent**: #DC2626 (Red)
-- **Background**: #ffffff (Light) / #0a0a0a (Dark)
-- **Foreground**: #171717 (Light) / #ededed (Dark)
-- **Secondary**: #f5f5f5 (Light Gray)
-
 ## Build Information
 
 Last successful build:
@@ -179,4 +171,7 @@ Private project
 
 ---
 
-Generated with Claude Code
+## Styling
+
+Use Tailwind's built-in color system 
+rely on component-level Tailwind classes over global applied styles when appropiate

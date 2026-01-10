@@ -44,15 +44,15 @@ export default function Home() {
 
   if (error) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-secondary">
-        <div className="bg-white rounded-lg shadow-xl p-8 max-w-md w-full text-center">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 dark:bg-gray-950">
+        <div className="bg-white dark:bg-gray-900 rounded-lg shadow-xl p-8 max-w-md w-full text-center mx-4">
           <h2 className="text-2xl font-bold text-accent mb-4">
             Failed to Load Data
           </h2>
-          <p className="text-gray-600 mb-6">{error.message}</p>
+          <p className="text-gray-600 dark:text-gray-400 mb-6">{error.message}</p>
           <button
             onClick={refetch}
-            className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors"
+            className="bg-primary text-white px-6 py-2 rounded-lg hover:bg-primary/90 transition-colors focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
           >
             Try Again
           </button>
@@ -63,14 +63,14 @@ export default function Home() {
 
   return (
     <ErrorBoundary>
-      <div className="min-h-screen bg-secondary">
+      <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
         <Header onSearchClick={() => setIsSearchOpen(true)} />
 
-        <main className="container mx-auto px-4 py-8">
+        <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
           {isLoading ? (
             <>
-              <div className="h-[400px] md:h-[500px] bg-gray-300 rounded-lg animate-pulse mb-8" />
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+              <div className="h-[400px] md:h-[500px] bg-gray-300 dark:bg-gray-700 rounded-lg animate-pulse mb-8" />
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
                 {[...Array(6)].map((_, i) => (
                   <LoadingCard key={i} />
                 ))}
@@ -94,7 +94,7 @@ export default function Home() {
               {/* Grid of Cards */}
               {displayedData.length > 0 ? (
                 <>
-                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
                     {displayedData.map((anime) => (
                       <AnimeCard key={anime.id} anime={anime} />
                     ))}
@@ -105,7 +105,7 @@ export default function Home() {
                     <div className="text-center">
                       <button
                         onClick={handleLoadMore}
-                        className="bg-primary text-white px-8 py-3 rounded-lg hover:bg-primary/90 transition-colors font-semibold"
+                        className="bg-primary text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg hover:bg-primary/90 transition-colors font-semibold focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
                       >
                         Load More Stories
                       </button>
@@ -113,13 +113,13 @@ export default function Home() {
                   )}
                 </>
               ) : (
-                <p className="text-center text-gray-500 py-8">
+                <p className="text-center text-gray-500 dark:text-gray-400 py-8">
                   No anime found for the selected type.
                 </p>
               )}
             </>
           ) : (
-            <p className="text-center text-gray-500 py-8">No data available</p>
+            <p className="text-center text-gray-500 dark:text-gray-400 py-8">No data available</p>
           )}
         </main>
 

@@ -20,9 +20,9 @@ export default function AnimeCard({ anime }: AnimeCardProps) {
   };
 
   return (
-    <Link href={`/anime/${anime.id}`}>
-      <article className="bg-white rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-shadow cursor-pointer h-full flex flex-col">
-        <div className="relative w-full aspect-video bg-secondary">
+    <Link href={`/anime/${anime.id}`} className="focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">
+      <article className="bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer h-full flex flex-col border border-transparent hover:border-primary/20">
+        <div className="relative w-full aspect-video bg-gray-100 dark:bg-gray-800">
           <Image
             src={`https://placehold.co/400x225/003DA5/FFFFFF?text=${encodeURIComponent(truncateText(anime.name, 20))}`}
             alt={anime.name}
@@ -37,11 +37,11 @@ export default function AnimeCard({ anime }: AnimeCardProps) {
           </span>
         </div>
 
-        <div className="p-4 flex-1 flex flex-col">
-          <h3 className="font-bold text-lg mb-2 text-foreground line-clamp-2">
+        <div className="p-4 flex-1 flex flex-col gap-2">
+          <h3 className="font-bold text-lg text-gray-900 dark:text-gray-100 line-clamp-2">
             {anime.name}
           </h3>
-          <p className="text-sm text-gray-600 mt-auto">
+          <p className="text-sm text-gray-600 dark:text-gray-400 mt-auto">
             {formatDate(anime.vintage)}
           </p>
         </div>

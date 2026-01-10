@@ -14,16 +14,16 @@ export default function Header({ onSearchClick }: HeaderProps) {
           <h1 className="text-2xl font-bold">Anime News</h1>
         </div>
 
-        <div className="flex items-center gap-4">
+        <div className="flex items-center gap-2 md:gap-4">
           <button
             onClick={onSearchClick}
-            className="p-2 hover:bg-white/10 rounded-full transition-colors"
+            className="p-2 hover:bg-white/10 rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-white/50"
             aria-label="Search"
           >
             <Search size={24} />
           </button>
           <button
-            className="p-2 hover:bg-white/10 rounded-full transition-colors"
+            className="p-2 hover:bg-white/10 rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-white/50"
             aria-label="User account"
           >
             <User size={24} />
