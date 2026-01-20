@@ -35,7 +35,8 @@ anime-news/
 │   │   ├── FilterDropdown.tsx    # Type filter dropdown
 │   │   ├── SearchModal.tsx       # Search overlay
 │   │   ├── LoadingCard.tsx       # Loading skeleton
-│   │   └── ErrorBoundary.tsx     # Error boundary component
+│   │   ├── ErrorBoundary.tsx     # Error boundary component
+│   │   └── ThemeProvider.tsx     # Theme state management
 │   ├── hooks/
 │   │   ├── useAnimeData.ts       # Fetch and cache anime data
 │   │   └── useSearch.ts          # Search functionality
@@ -68,7 +69,8 @@ anime-news/
 - "Load More" pagination for better performance
 - Loading states with skeleton cards
 - Error handling with retry functionality
-- Dark mode support (system preference)
+- Dark mode support (system preference + manual toggle in dev mode)
+- Dev-only dark mode toggle (manual theme switching for testing)
 
 ### Performance
 - Static page generation (SSG) for 55 anime pages
@@ -138,6 +140,26 @@ Last successful build:
 - TypeScript compilation passed
 - No errors or warnings
 
+## Styling Architecture
+
+### Approach
+- **Tailwind-first**: Use Tailwind utility classes for all component styling
+- **Component-level**: Avoid global CSS classes, rely on component-specific Tailwind classes
+- **CSS Variables**: Only for branding colors (primary, accent, background, foreground)
+- **Minimal globals.css**: ~80 lines (branding colors, scrollbar, selection styles)
+
+### Color System
+- **Primary**: #003DA5 (Blue) - `bg-primary`
+- **Accent**: #DC2626 (Red) - `bg-accent`
+- **Tailwind Colors**: `bg-white dark:bg-gray-900`, `text-gray-600 dark:text-gray-400`
+- **No custom semantic colors**: Removed card-bg, hover-bg, text-muted in favor of Tailwind
+
+### Dark Mode
+- **Tailwind CSS v4**: Automatic support for both `@media (prefers-color-scheme: dark)` and `.dark` class
+- **Class-based toggle**: ThemeProvider adds/removes `dark` class on `<html>` element
+- **Production**: Respects system preference only
+- **Development**: Manual toggle button in header for easy testing
+
 ## Future Enhancements
 
 - Add anime descriptions and images
@@ -158,6 +180,23 @@ Last successful build:
 - Tailwind CSS 4 with inline theme configuration
 - Git repository initialized (master branch)
 
+### Recent Optimizations (2026-01)
+- Cleaned globals.css: Reduced from ~220 lines to ~80 lines (68% reduction)
+- Standardized to Tailwind color system across all components
+- Removed redundant CSS and unused utility classes
+- Added dev-only dark mode toggle for easier theme testing
+
+## Configuration
+
+### Next.js Config
+- React Compiler enabled
+- Image domains: `placehold.co` (for placeholder images)
+
+### Tailwind CSS
+- Version 4 (PostCSS-based)
+- Dark mode: Automatic (supports both class and media query)
+- No config file needed (CSS-based configuration)
+
 ## Browser Support
 
 - Chrome/Edge (latest)
@@ -171,7 +210,4 @@ Private project
 
 ---
 
-## Styling
-
-Use Tailwind's built-in color system 
-rely on component-level Tailwind classes over global applied styles when appropiate
+Generated with Claude Code

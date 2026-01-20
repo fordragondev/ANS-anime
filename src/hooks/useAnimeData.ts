@@ -21,6 +21,7 @@ export function useAnimeData() {
 
       const result = await response.json();
       setData(result);
+      setIsLoading(false);
     } catch (err) {
       const error = err instanceof Error ? err : new Error('Unknown error');
 
@@ -29,9 +30,8 @@ export function useAnimeData() {
         setTimeout(() => fetchData(retryCount + 1), 1000 * (retryCount + 1));
       } else {
         setError(error);
+        setIsLoading(false);
       }
-    } finally {
-      setIsLoading(false);
     }
   };
 

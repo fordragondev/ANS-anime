@@ -1,12 +1,16 @@
 'use client';
 
-import { Search, User } from 'lucide-react';
+import { Search, User, Moon, Sun } from 'lucide-react';
+import { useTheme } from './ThemeProvider';
 
 interface HeaderProps {
   onSearchClick: () => void;
 }
 
 export default function Header({ onSearchClick }: HeaderProps) {
+  const { isDark, toggleDarkMode } = useTheme();
+  const isDevelopment = process.env.NODE_ENV === 'development';
+
   return (
     <header className="bg-primary text-white sticky top-0 z-50 shadow-md">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
@@ -22,6 +26,19 @@ export default function Header({ onSearchClick }: HeaderProps) {
           >
             <Search size={24} />
           </button>
+
+          {/* Dev-only dark mode toggle */}
+          {isDevelopment && (
+            <button
+              onClick={toggleDarkMode}
+              className="p-2 hover:bg-white/10 rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-white/50"
+              aria-label="Toggle dark mode"
+              title={`Toggle dark mode (Dev Only) - Currently ${isDark ? 'Dark' : 'Light'}`}
+            >
+              {isDark ? <Sun size={24} /> : <Moon size={24} />}
+            </button>
+          )}
+
           <button
             className="p-2 hover:bg-white/10 rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-white/50"
             aria-label="User account"
