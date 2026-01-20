@@ -37,15 +37,17 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     return window.matchMedia('(prefers-color-scheme: dark)').matches;
   })();
 
-  // Apply dark class to html element
+  // Apply dark/light class to html element
   useEffect(() => {
     if (!mounted) return;
 
     const html = document.documentElement;
     if (isDark) {
       html.classList.add('dark');
+      html.classList.remove('light');
     } else {
       html.classList.remove('dark');
+      html.classList.add('light');
     }
   }, [isDark, mounted]);
 

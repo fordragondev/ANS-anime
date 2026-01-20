@@ -1,5 +1,8 @@
 @import "tailwindcss";
 
+/* Enable class-based dark mode for Tailwind v4 */
+@custom-variant dark (&:where(.dark, .dark *));
+
 /* ===================================
    Branding Colors
    =================================== */
@@ -19,11 +22,18 @@
   --color-accent: var(--accent);
 }
 
+/* Dark mode: System preference */
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.light) {
     --background: #0a0a0a;
     --foreground: #ededed;
   }
+}
+
+/* Dark mode: Manual toggle via .dark class */
+:root.dark {
+  --background: #0a0a0a;
+  --foreground: #ededed;
 }
 
 /* ===================================
