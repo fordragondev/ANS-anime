@@ -15,7 +15,7 @@ const geistMono = Geist_Mono({
 
 export const metadata: Metadata = {
   title: "Anime News - Latest Anime Updates",
-  description: "Stay updated with the latest anime news, releases, and updates from Anime News Network.",
+  description: "Stay updated with the latest anime news, releases, and updates from Anime News Network. Inspired on KSL.com site UI design.",
   keywords: ["anime", "news", "manga", "updates", "releases"],
 };
 
