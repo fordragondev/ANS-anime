@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { AnimeDetailItem } from '@/types/anime';
-import { truncateText } from '@/lib/utils';
+import { getImageUrl, isPlaceholderImage } from '@/lib/utils';
 import SectionHeader from '@/components/SectionHeader';
 
 interface CategorySectionProps {
@@ -30,7 +30,8 @@ export default function CategorySection({ title, featured, links }: CategorySect
           <article className="group section-divider pb-4">
             <div className="relative aspect-[16/9] rounded-lg overflow-hidden mb-2">
               <Image
-                src={featured.imageUrl || `https://placehold.co/400x225/003DA5/FFFFFF?text=${encodeURIComponent(truncateText(featured.name, 20))}`}
+                src={getImageUrl(featured.imageUrl)}
+                unoptimized={isPlaceholderImage(getImageUrl(featured.imageUrl))}
                 alt={featured.name}
                 fill
                 className="object-cover group-hover:scale-105 transition-transform duration-300"

@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Settings, Bookmark } from 'lucide-react';
 import { AnimeDetailItem } from '@/types/anime';
-import { formatDate, truncateText } from '@/lib/utils';
+import { formatDate, getImageUrl, isPlaceholderImage } from '@/lib/utils';
 import FilterDropdown from '@/components/FilterDropdown';
 
 interface LatestNewsProps {
@@ -27,7 +27,8 @@ function NewsItem({ anime }: { anime: AnimeDetailItem }) {
         {/* Thumbnail */}
         <div className="relative w-full sm:w-48 h-36 flex-shrink-0 rounded-lg overflow-hidden">
           <Image
-            src={anime.imageUrl || `https://placehold.co/200x150/003DA5/FFFFFF?text=${encodeURIComponent(truncateText(anime.name, 15))}`}
+            src={getImageUrl(anime.imageUrl)}
+            unoptimized={isPlaceholderImage(getImageUrl(anime.imageUrl))}
             alt={anime.name}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"

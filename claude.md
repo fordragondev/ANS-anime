@@ -16,6 +16,8 @@ A modern Next.js application that displays anime information from the Anime News
 
 ```
 anime-news/
+├── public/
+│   └── placeholder-anime.svg    # Default placeholder image for missing images
 ├── src/
 │   ├── app/
 │   │   ├── anime/[id]/
@@ -29,20 +31,27 @@ anime-news/
 │   │   ├── globals.css           # Global styles
 │   │   └── favicon.ico
 │   ├── components/
+│   │   ├── sections/             # Section components
+│   │   │   ├── TopStory.tsx      # Hero section with featured anime
+│   │   │   ├── TopPicks.tsx      # Top picks grid (3-column)
+│   │   │   ├── LatestNews.tsx    # Latest news list with filters
+│   │   │   ├── CategorySection.tsx # Category section with featured + links
+│   │   │   └── LoadingSkeletons.tsx # Loading skeleton components
 │   │   ├── Header.tsx            # Navigation header with search
-│   │   ├── FeaturedArticle.tsx   # Hero section with featured anime
+│   │   ├── SectionHeader.tsx     # Reusable section header with divider
 │   │   ├── AnimeCard.tsx         # Individual anime card
 │   │   ├── FilterDropdown.tsx    # Type filter dropdown
 │   │   ├── SearchModal.tsx       # Search overlay
-│   │   ├── LoadingCard.tsx       # Loading skeleton
 │   │   ├── ErrorBoundary.tsx     # Error boundary component
 │   │   └── ThemeProvider.tsx     # Theme state management
 │   ├── hooks/
 │   │   ├── useAnimeData.ts       # Fetch and cache anime data
-│   │   └── useSearch.ts          # Search functionality
+│   │   ├── useSearch.ts          # Search functionality
+│   │   └── useSectionData.ts     # Section data organization
 │   ├── lib/
-│   │   ├── api.ts                # API functions
-│   │   ├── utils.ts              # Utility functions
+│   │   ├── api.ts                # API functions (fetchAnimeData)
+│   │   ├── animeDetails.ts       # Fetch detailed anime info
+│   │   ├── utils.ts              # Utility functions + image helpers
 │   │   └── constants.ts          # App constants
 │   └── types/
 │       └── anime.ts              # TypeScript types
@@ -185,12 +194,17 @@ Last successful build:
 - Standardized to Tailwind color system across all components
 - Removed redundant CSS and unused utility classes
 - Added dev-only dark mode toggle for easier theme testing
+- Removed unused components (FeaturedArticle, LoadingCard, dataTransform)
+- Added section components (TopStory, TopPicks, LatestNews, CategorySection)
+- Category sections grid layout: 3-column (desktop), 2-column (tablet), 1-column (mobile)
+- Local SVG placeholder image instead of external placehold.co service
+- Image utility functions (getImageUrl, isPlaceholderImage) for consistent image handling
 
 ## Configuration
 
 ### Next.js Config
 - React Compiler enabled
-- Image domains: `placehold.co` (for placeholder images)
+- Local SVG placeholder for missing images (no external dependencies)
 
 ### Tailwind CSS
 - Version 4 (PostCSS-based)

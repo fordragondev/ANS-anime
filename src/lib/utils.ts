@@ -42,3 +42,14 @@ export function truncateText(text: string, maxLength: number): string {
   if (text.length <= maxLength) return text;
   return text.substring(0, maxLength) + '...';
 }
+
+// Default placeholder image (no dynamic text to avoid encoding issues)
+export const PLACEHOLDER_IMAGE = '/placeholder-anime.svg';
+
+export function getImageUrl(imageUrl: string | undefined): string {
+  return imageUrl || PLACEHOLDER_IMAGE;
+}
+
+export function isPlaceholderImage(url: string): boolean {
+  return url === PLACEHOLDER_IMAGE || url.includes('placehold.co');
+}

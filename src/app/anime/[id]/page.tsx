@@ -3,7 +3,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { ArrowLeft } from 'lucide-react';
 import { fetchAnimeData } from '@/lib/api';
-import { formatDate, truncateText } from '@/lib/utils';
+import { formatDate, PLACEHOLDER_IMAGE } from '@/lib/utils';
 
 interface AnimeDetailPageProps {
   params: Promise<{ id: string }>;
@@ -87,7 +87,8 @@ export default async function AnimeDetailPage({ params }: AnimeDetailPageProps) 
             {/* Hero Image */}
             <div className="relative w-full h-[300px] sm:h-[400px] bg-gray-100 dark:bg-gray-800">
               <Image
-                src={`https://placehold.co/1200x400/003DA5/FFFFFF?text=${encodeURIComponent(truncateText(anime.name, 30))}`}
+                src={PLACEHOLDER_IMAGE}
+                unoptimized
                 alt={anime.name}
                 fill
                 className="object-cover"

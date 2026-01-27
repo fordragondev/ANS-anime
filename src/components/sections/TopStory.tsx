@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { AnimeDetailItem } from '@/types/anime';
-import { formatDate, truncateText } from '@/lib/utils';
+import { formatDate, getImageUrl, isPlaceholderImage } from '@/lib/utils';
 import SectionHeader from '@/components/SectionHeader';
 
 interface TopStoryProps {
@@ -21,11 +21,13 @@ export default function TopStory({ anime, title = 'Anime Breaking News' }: TopSt
         {/* Image Section - Left side (60-70% on desktop) */}
         <div className="relative w-full md:w-[65%] h-[250px] md:h-auto md:min-h-[500px]">
           <Image
-            src={anime.imageUrl || `https://placehold.co/1200x500/003DA5/FFFFFF?text=${encodeURIComponent(truncateText(anime.name, 30))}`}
+            src={getImageUrl(anime.imageUrl)}
+            unoptimized={isPlaceholderImage(getImageUrl(anime.imageUrl))}
             alt={anime.name}
             fill
             className="object-cover"
             priority
+            loading="eager"
             sizes="(max-width: 768px) 100vw, 65vw"
           />
         </div>

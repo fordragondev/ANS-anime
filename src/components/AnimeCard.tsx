@@ -1,7 +1,7 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { AnimeItem } from '@/types/anime';
-import { formatDate, truncateText } from '@/lib/utils';
+import { formatDate, PLACEHOLDER_IMAGE } from '@/lib/utils';
 
 interface AnimeCardProps {
   anime: AnimeItem;
@@ -24,7 +24,8 @@ export default function AnimeCard({ anime }: AnimeCardProps) {
       <article className="bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer h-full flex flex-col border border-transparent hover:border-primary/20">
         <div className="relative w-full aspect-video bg-gray-100 dark:bg-gray-800">
           <Image
-            src={`https://placehold.co/400x225/003DA5/FFFFFF?text=${encodeURIComponent(truncateText(anime.name, 20))}`}
+            src={PLACEHOLDER_IMAGE}
+            unoptimized
             alt={anime.name}
             fill
             className="object-cover"

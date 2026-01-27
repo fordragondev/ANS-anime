@@ -2,7 +2,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { MessageCircle } from 'lucide-react';
 import { AnimeDetailItem } from '@/types/anime';
-import { truncateText } from '@/lib/utils';
+import { getImageUrl, isPlaceholderImage } from '@/lib/utils';
 
 interface TopPicksProps {
   items: AnimeDetailItem[];
@@ -21,7 +21,8 @@ function PickCard({ anime }: { anime: AnimeDetailItem }) {
         {/* Image */}
         <div className="relative aspect-[16/10] overflow-hidden">
           <Image
-            src={anime.imageUrl || `https://placehold.co/400x250/003DA5/FFFFFF?text=${encodeURIComponent(truncateText(anime.name, 20))}`}
+            src={getImageUrl(anime.imageUrl)}
+            unoptimized={isPlaceholderImage(getImageUrl(anime.imageUrl))}
             alt={anime.name}
             fill
             className="object-cover group-hover:scale-105 transition-transform duration-300"

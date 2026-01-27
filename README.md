@@ -39,8 +39,8 @@ A modern web application that displays anime information from the Anime News Net
 
 ```bash
 # Clone the repository
-git clone https://github.com/yourusername/anime-news.git
-cd anime-news
+git clone https://github.com/fordragondev/ANS-anime.git
+cd ANS-anime
 
 # Install dependencies
 npm install
@@ -71,24 +71,32 @@ src/
 │   ├── page.tsx         # Home page
 │   └── globals.css      # Global styles
 ├── components/
+│   ├── sections/        # Page section components
+│   │   ├── TopStory.tsx
+│   │   ├── TopPicks.tsx
+│   │   ├── LatestNews.tsx
+│   │   ├── CategorySection.tsx
+│   │   └── LoadingSkeletons.tsx
 │   ├── Header.tsx       # Navigation with search
-│   ├── AnimeCard.tsx    # Anime card component
+│   ├── SectionHeader.tsx # Reusable section header
+│   ├── AnimeCard.tsx
 │   ├── FilterDropdown.tsx
 │   ├── SearchModal.tsx
-│   ├── SectionHeader.tsx
 │   ├── ErrorBoundary.tsx
 │   └── ThemeProvider.tsx
 ├── hooks/
 │   ├── useAnimeData.ts  # Fetch and cache anime
 │   ├── useSearch.ts     # Search functionality
-│   └── useSectionData.ts
+│   └── useSectionData.ts # Section data organization
 ├── lib/
 │   ├── api.ts           # API functions
 │   ├── animeDetails.ts  # Detail fetching
-│   ├── utils.ts         # Utilities
+│   ├── utils.ts         # Utilities + image helpers
 │   └── constants.ts     # App constants
 └── types/
     └── anime.ts         # TypeScript types
+public/
+└── placeholder-anime.svg # Default placeholder image
 ```
 
 ## API

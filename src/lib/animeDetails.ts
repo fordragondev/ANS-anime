@@ -1,6 +1,7 @@
 import { parseStringPromise } from 'xml2js';
 import { AnimeItem, AnimeDetailItem } from '@/types/anime';
 import { DETAIL_API_CONFIG } from './constants';
+import { PLACEHOLDER_IMAGE } from './utils';
 
 interface AnimeDetailResponse {
   ann: {
@@ -131,7 +132,7 @@ export function mergeAnimeWithDetails(
   return {
     ...item,
     description: details?.description || `${item.name} is a ${item.type} anime.`,
-    imageUrl: details?.imageUrl || `https://placehold.co/1200x500/003DA5/FFFFFF?text=${encodeURIComponent(item.name.substring(0, 30))}`,
+    imageUrl: details?.imageUrl || PLACEHOLDER_IMAGE,
     director: details?.director || 'Unknown',
     rating: details?.rating || 0,
     voteCount: details?.voteCount || 0,
