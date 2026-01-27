@@ -1,6 +1,6 @@
 import { parseStringPromise } from 'xml2js';
 import { API_CONFIG } from './constants';
-import { AnimeResponse, AnimeItem } from '@/types/anime';
+import { AnimeItem } from '@/types/anime';
 
 export async function fetchAnimeData(): Promise<AnimeItem[]> {
   try {
@@ -41,15 +41,5 @@ export async function fetchAnimeData(): Promise<AnimeItem[]> {
   } catch (error) {
     console.error('Error fetching anime data:', error);
     throw error;
-  }
-}
-
-export async function getAnimeById(id: string): Promise<AnimeItem | null> {
-  try {
-    const allAnime = await fetchAnimeData();
-    return allAnime.find((anime) => anime.id === id) || null;
-  } catch (error) {
-    console.error('Error fetching anime by ID:', error);
-    return null;
   }
 }
