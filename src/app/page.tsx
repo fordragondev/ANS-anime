@@ -127,14 +127,16 @@ export default function Home() {
               {/* CATEGORY SECTIONS */}
               {Object.keys(sectionData.categories).length > 0 && (
                 <section className="sections container mx-auto px-4 sm:px-6 lg:px-8 pb-8">
-                  {Object.entries(sectionData.categories).map(([category, categoryData]) => (
-                    <CategorySection
-                      key={category}
-                      title={category}
-                      featured={categoryData.featured}
-                      links={categoryData.links}
-                    />
-                  ))}
+                  <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 lg:gap-10">
+                    {Object.entries(sectionData.categories).map(([category, categoryData]) => (
+                      <CategorySection
+                        key={category}
+                        title={category}
+                        featured={categoryData.featured}
+                        links={categoryData.links}
+                      />
+                    ))}
+                  </div>
                 </section>
               )}
             </>

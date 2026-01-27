@@ -209,7 +209,7 @@ Create classes with section names "top_story",  "top_picks", "queue_nm" and "sec
 
 ---
 
-## 4. ADDITIONAL SECTIONS (Simplified)
+## 4. SECTIONS
 
 
 ### Category Sections (Sports, Features, etc.)
@@ -237,6 +237,77 @@ Create classes with section names "top_story",  "top_picks", "queue_nm" and "sec
   </div>
 </section>
 ```
+
+### Key Features of the Sections Div:
+
+**Structure:** Each section block contains:
+- Section Header - Category name + "»" arrow link
+- Featured Article - Large image + title
+- Article Links List - 4 bullet-pointed text links
+
+### Layout Pattern:
+| Breakpoint | Columns |
+|------------|---------|
+| Desktop | 3-column grid |
+| Tablet | 2-column grid |
+| Mobile | 1-column stack |
+
+- Grid gap: 30-40px between sections
+
+### Key Features
+
+#### 1. Section Header
+
+**Visual Characteristics:**
+- Bold category name
+- Right-aligned arrow (») or "View All" link
+- Subtle bottom border or divider
+- Consistent spacing
+
+**Typography:**
+- Font size: 20-24px
+- Font weight: Bold (600-700)
+- Color: KSL navy blue (#003DA5) or dark gray
+- Text transform: Capitalize or uppercase
+
+#### 2. Featured Article
+
+**Visual Characteristics:**
+- Medium-sized image (300-400px width)
+- Image aspect ratio: 16:9 or 4:3
+- Title below or overlaying image
+- Prominent position at top of section
+
+#### 3. Article Links List
+
+**Visual Characteristics:**
+- 4 text-only links
+- Bullet points (•) or simple list
+- Compact spacing
+- Truncated titles if too long
+
+**Typography:**
+- Font size: 14-16px
+- Line height: 1.5-1.6
+- Color: Dark gray (#333) → Blue on hover
+
+#### 4. Image Loading
+- Uses responsive images with different sizes
+- Lazy loading for images below the fold
+- Placeholder/skeleton while loading
+
+### Performance Considerations
+
+#### Image Optimization
+- Use Next.js Image component for automatic optimization
+- Lazy load images below the fold
+- Use appropriate image formats (WebP with fallback)
+- Serve responsive images based on viewport
+
+#### Loading Strategy
+- Skeleton loaders for initial page load
+- Progressive enhancement
+- Prefetch links on hover
 
 
 ## Common Design Patterns Across All Sections
