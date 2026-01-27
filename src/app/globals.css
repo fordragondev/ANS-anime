@@ -89,3 +89,20 @@ body {
   background: var(--primary);
   color: white;
 }
+
+/* ===================================
+   Component Utilities
+   =================================== */
+.section-divider {
+  border-bottom: 1px dotted #aaa;
+}
+
+.news-item-divider {
+  border-bottom: none;
+}
+
+@media (min-width: 640px) {
+  .news-item-divider {
+    border-bottom: 1px dotted #aaa;
+  }
+}

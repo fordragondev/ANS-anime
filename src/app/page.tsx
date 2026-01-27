@@ -1,45 +1,62 @@
 'use client';
-//import Image from "next/image";
+
 import { useState, useMemo } from 'react';
 import Header from '@/components/Header';
-import FeaturedArticle from '@/components/FeaturedArticle';
-import AnimeCard from '@/components/AnimeCard';
-import FilterDropdown from '@/components/FilterDropdown';
+import TopStory from '@/components/sections/TopStory';
+import TopPicks from '@/components/sections/TopPicks';
+import LatestNews from '@/components/sections/LatestNews';
+import CategorySection from '@/components/sections/CategorySection';
+import {
+  TopStorySkeleton,
+  TopPicksSkeleton,
+  LatestNewsSkeleton,
+  CategorySectionSkeleton,
+} from '@/components/sections/LoadingSkeletons';
 import SearchModal from '@/components/SearchModal';
-import LoadingCard from '@/components/LoadingCard';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { useAnimeData } from '@/hooks/useAnimeData';
+import { useSectionData } from '@/hooks/useSectionData';
 import { useSearch } from '@/hooks/useSearch';
 import { filterAnimeByType, getUniqueTypes } from '@/lib/utils';
-import { PAGINATION } from '@/lib/constants';
+import { SECTION_ALLOCATION } from '@/lib/constants';
+import { AnimeType } from '@/types/anime';
 
 export default function Home() {
   const { data, isLoading, error, refetch } = useAnimeData();
-  const [selectedType, setSelectedType] = useState('All');
-  const [itemsToShow, setItemsToShow] = useState(PAGINATION.INITIAL_ITEMS);
+  const { sectionData, isLoadingDetails } = useSectionData(data);
+  const [selectedType, setSelectedType] = useState<AnimeType>('All');
+  const [latestNewsCount, setLatestNewsCount] = useState(SECTION_ALLOCATION.LATEST_NEWS_INITIAL);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
 
   const { query, setQuery, results, clearSearch } = useSearch(data);
 
-  const filteredData = useMemo(() => {
-    return filterAnimeByType(data, selectedType);
-  }, [data, selectedType]);
-
-  const displayedData = useMemo(() => {
-    return filteredData.slice(1, itemsToShow + 1); // Skip first item (featured)
-  }, [filteredData, itemsToShow]);
-
   const uniqueTypes = useMemo(() => getUniqueTypes(data), [data]);
 
+  // Filter latest news by type
+  const filteredLatestNews = useMemo(() => {
+    if (!sectionData) return [];
+    const filtered = filterAnimeByType(sectionData.latestNews, selectedType);
+    return filtered.slice(0, latestNewsCount);
+  }, [sectionData, selectedType, latestNewsCount]);
+
   const handleLoadMore = () => {
-    setItemsToShow((prev) => prev + PAGINATION.LOAD_MORE_COUNT);
+    setLatestNewsCount((prev) => prev + SECTION_ALLOCATION.LATEST_NEWS_LOAD_MORE);
   };
 
-  const hasMore = itemsToShow < filteredData.length - 1;
+  const hasMoreNews = useMemo(() => {
+    if (!sectionData) return false;
+    const totalFiltered = filterAnimeByType(sectionData.latestNews, selectedType).length;
+    return latestNewsCount < totalFiltered;
+  }, [sectionData, selectedType, latestNewsCount]);
 
   const handleSearchClose = () => {
     setIsSearchOpen(false);
     clearSearch();
+  };
+
+  const handleTypeChange = (type: string) => {
+    setSelectedType(type as AnimeType);
+    setLatestNewsCount(SECTION_ALLOCATION.LATEST_NEWS_INITIAL);
   };
 
   if (error) {
@@ -61,65 +78,70 @@ export default function Home() {
     );
   }
 
+  const showLoading = isLoading || (data.length > 0 && isLoadingDetails && !sectionData);
+
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
         <Header onSearchClick={() => setIsSearchOpen(true)} />
 
-        <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
-          {isLoading ? (
-            <>
-              <div className="h-[400px] md:h-[500px] bg-gray-300 dark:bg-gray-700 rounded-lg animate-pulse mb-8" />
-              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6">
-                {[...Array(6)].map((_, i) => (
-                  <LoadingCard key={i} />
-                ))}
+        <main>
+          {showLoading ? (
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
+              <TopStorySkeleton />
+              <div className="mt-8">
+                <TopPicksSkeleton />
               </div>
-            </>
-          ) : data.length > 0 ? (
+              <div className="mt-8">
+                <LatestNewsSkeleton />
+              </div>
+              <div className="mt-8">
+                <CategorySectionSkeleton />
+              </div>
+            </div>
+          ) : sectionData ? (
             <>
-              {/* Featured Article */}
-              {filteredData[0] && <FeaturedArticle anime={filteredData[0]} />}
+              {/* TOP_STORY - Hero section */}
+              <section className="top_story container mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+                <TopStory anime={sectionData.topStory} />
+              </section>
 
-              {/* Filter */}
-              <FilterDropdown
-                types={uniqueTypes}
-                selectedType={selectedType}
-                onTypeChange={(type) => {
-                  setSelectedType(type);
-                  setItemsToShow(PAGINATION.INITIAL_ITEMS);
-                }}
-              />
+              {/* TOP_PICKS - 3 column grid */}
+              <section className="top_picks container mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+                <TopPicks items={sectionData.topPicks} />
+              </section>
 
-              {/* Grid of Cards */}
-              {displayedData.length > 0 ? (
-                <>
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-6 mb-8">
-                    {displayedData.map((anime) => (
-                      <AnimeCard key={anime.id} anime={anime} />
-                    ))}
-                  </div>
+              {/* QUEUE_MN - Latest News with filter */}
+              <section className="queue_mn container mx-auto px-4 sm:px-6 lg:px-8 mb-8">
+                <LatestNews
+                  items={filteredLatestNews}
+                  onLoadMore={handleLoadMore}
+                  hasMore={hasMoreNews}
+                  isLoading={isLoadingDetails}
+                  types={uniqueTypes}
+                  selectedType={selectedType}
+                  onTypeChange={handleTypeChange}
+                />
+              </section>
 
-                  {/* Load More Button */}
-                  {hasMore && (
-                    <div className="text-center">
-                      <button
-                        onClick={handleLoadMore}
-                        className="bg-primary text-white px-6 sm:px-8 py-2 sm:py-3 rounded-lg hover:bg-primary/90 transition-colors font-semibold focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
-                      >
-                        Load More Stories
-                      </button>
-                    </div>
-                  )}
-                </>
-              ) : (
-                <p className="text-center text-gray-500 dark:text-gray-400 py-8">
-                  No anime found for the selected type.
-                </p>
+              {/* CATEGORY SECTIONS */}
+              {Object.keys(sectionData.categories).length > 0 && (
+                <section className="sections container mx-auto px-4 sm:px-6 lg:px-8 pb-8">
+                  {Object.entries(sectionData.categories).map(([category, categoryData]) => (
+                    <CategorySection
+                      key={category}
+                      title={category}
+                      featured={categoryData.featured}
+                      links={categoryData.links}
+                    />
+                  ))}
+                </section>
               )}
             </>
           ) : (
-            <p className="text-center text-gray-500 dark:text-gray-400 py-8">No data available</p>
+            <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-8">
+              <p className="text-center text-gray-500 dark:text-gray-400">No data available</p>
+            </div>
           )}
         </main>
 

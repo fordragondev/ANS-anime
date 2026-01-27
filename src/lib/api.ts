@@ -6,7 +6,7 @@ export async function fetchAnimeData(): Promise<AnimeItem[]> {
   try {
     const url = new URL(API_CONFIG.BASE_URL);
     Object.entries(API_CONFIG.PARAMS).forEach(([key, value]) => {
-      url.searchParams.append(key, value);
+      url.searchParams.append(key, String(value));
     });
 
     const response = await fetch(url.toString(), {

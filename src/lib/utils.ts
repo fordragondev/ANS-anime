@@ -1,6 +1,6 @@
 import { AnimeItem } from '@/types/anime';
 
-export function filterAnimeByType(anime: AnimeItem[], type: string): AnimeItem[] {
+export function filterAnimeByType<T extends AnimeItem>(anime: T[], type: string): T[] {
   if (type === 'All') {
     return anime;
   }
