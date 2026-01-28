@@ -1,3 +1,33 @@
+/**
+ * ANIME DETAIL PAGE - Static Site Generation (SSG) with ISR
+ *
+ * RENDERING STRATEGY: SSG (Static Site Generation) + ISR (Incremental Static Regeneration)
+ *
+ * How it works:
+ * 1. No 'use client' directive = Server Component (runs on server only)
+ * 2. generateStaticParams() pre-renders all pages at build time
+ * 3. Pages are served as static HTML (instant load, no server processing)
+ * 4. `revalidate: 3600` in fetch enables ISR - pages refresh every hour
+ *
+ * Why SSG for this page:
+ * - Content rarely changes (anime details are static)
+ * - SEO critical (search engines need to index each anime)
+ * - Fast load times essential (users expect instant detail pages)
+ * - Predictable content (same for all users)
+ *
+ * Trade-offs:
+ * + Fastest possible page loads (pre-built HTML)
+ * + Perfect for SEO (full content in HTML)
+ * + Works without JavaScript
+ * + Reduced server load (no runtime rendering)
+ * - Build time increases with more pages
+ * - Updates require revalidation or rebuild
+ * - Not suitable for user-specific content
+ *
+ * @see /page.tsx for CSR example
+ * @see /search/page.tsx for SSR example
+ * @see /browse/page.tsx for Hybrid example
+ */
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
@@ -9,6 +39,11 @@ interface AnimeDetailPageProps {
   params: Promise<{ id: string }>;
 }
 
+/**
+ * SSG: generateStaticParams tells Next.js which pages to pre-render at build time.
+ * This function runs during `npm run build` and returns all anime IDs.
+ * Each ID becomes a static HTML page: /anime/123, /anime/456, etc.
+ */
 export async function generateStaticParams() {
   try {
     const anime = await fetchAnimeData();
@@ -21,6 +56,10 @@ export async function generateStaticParams() {
   }
 }
 
+/**
+ * SSG: generateMetadata creates SEO-friendly meta tags for each page.
+ * Also runs at build time, providing unique title/description per anime.
+ */
 export async function generateMetadata({ params }: AnimeDetailPageProps) {
   const { id } = await params;
   try {
@@ -44,6 +83,12 @@ export async function generateMetadata({ params }: AnimeDetailPageProps) {
   }
 }
 
+/**
+ * SSG: The main page component is an async Server Component.
+ * - Runs at build time (SSG) for paths from generateStaticParams
+ * - The fetch() call includes `revalidate: 3600` for ISR
+ * - ISR allows the static page to refresh every hour without rebuild
+ */
 export default async function AnimeDetailPage({ params }: AnimeDetailPageProps) {
   const { id } = await params;
 

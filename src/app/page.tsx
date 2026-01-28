@@ -1,3 +1,32 @@
+/**
+ * HOME PAGE - Client-Side Rendering (CSR) Strategy
+ *
+ * RENDERING STRATEGY: CSR (Client-Side Rendering)
+ *
+ * How it works:
+ * 1. The 'use client' directive marks this as a Client Component
+ * 2. Initial HTML is sent with a loading skeleton (no data)
+ * 3. React hydrates in the browser and fetches data via useAnimeData() hook
+ * 4. UI updates dynamically as data arrives
+ *
+ * Why CSR for this page:
+ * - Highly interactive (search, filters, load more, modals)
+ * - Real-time updates needed (type filters change view instantly)
+ * - User-specific state (search queries, filter selections)
+ * - SEO less critical for home page (detail pages handle SEO)
+ *
+ * Trade-offs:
+ * + Fast initial page load (minimal HTML)
+ * + Smooth interactivity (no page reloads)
+ * + Can show loading states with skeletons
+ * - Content not visible until JS executes
+ * - Search engines may not see full content
+ * - Slower time-to-content on slow connections
+ *
+ * @see /anime/[id]/page.tsx for SSG example
+ * @see /search/page.tsx for SSR example
+ * @see /browse/page.tsx for Hybrid example
+ */
 'use client';
 
 import { useState, useMemo } from 'react';
@@ -22,6 +51,8 @@ import { SECTION_ALLOCATION } from '@/lib/constants';
 import { AnimeType } from '@/types/anime';
 
 export default function Home() {
+  // CSR: Data is fetched in the browser after initial render
+  // The useAnimeData hook handles fetching, caching, and error states
   const { data, isLoading, error, refetch } = useAnimeData();
   const { sectionData, isLoadingDetails } = useSectionData(data);
   const [selectedType, setSelectedType] = useState<AnimeType>('All');
@@ -78,6 +109,8 @@ export default function Home() {
     );
   }
 
+  // CSR: Show loading skeleton while data is being fetched client-side
+  // This provides visual feedback during the data fetch phase
   const showLoading = isLoading || (data.length > 0 && isLoadingDetails && !sectionData);
 
   return (

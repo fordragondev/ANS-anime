@@ -21,13 +21,18 @@ anime-news/
 ├── src/
 │   ├── app/
 │   │   ├── anime/[id]/
-│   │   │   ├── page.tsx          # Dynamic anime detail pages
+│   │   │   ├── page.tsx          # Anime detail pages (SSG)
 │   │   │   └── not-found.tsx     # 404 page for anime
 │   │   ├── api/
 │   │   │   └── anime/
 │   │   │       └── route.ts      # API route for anime data
+│   │   ├── browse/
+│   │   │   ├── page.tsx          # Browse catalog (Hybrid - Server Component)
+│   │   │   └── BrowseClient.tsx  # Browse interactivity (Hybrid - Client Component)
+│   │   ├── search/
+│   │   │   └── page.tsx          # Search results (SSR)
 │   │   ├── layout.tsx            # Root layout
-│   │   ├── page.tsx              # Home page
+│   │   ├── page.tsx              # Home page (CSR)
 │   │   ├── globals.css           # Global styles
 │   │   └── favicon.ico
 │   ├── components/
@@ -71,9 +76,16 @@ anime-news/
 - Individual anime detail pages with dynamic routing
 - Client-side data caching (1 hour revalidation)
 
+### Pages
+- **Home** (`/`): Interactive dashboard with sections, filters, search modal
+- **Anime Detail** (`/anime/[id]`): Pre-rendered anime information pages
+- **Search** (`/search?q=...`): Server-rendered search results with shareable URLs
+- **Browse** (`/browse`): Full anime catalog with type filtering and pagination
+
 ### User Interface
 - Responsive design (mobile, tablet, desktop)
-- Search modal with real-time filtering
+- Navigation header with Browse link and search
+- Search modal (home) and dedicated search page (shareable URLs)
 - Filter by anime type (All, TV, Movie, ONA, OVA, Special)
 - "Load More" pagination for better performance
 - Loading states with skeleton cards
@@ -82,7 +94,8 @@ anime-news/
 - Dev-only dark mode toggle (manual theme switching for testing)
 
 ### Performance
-- Static page generation (SSG) for 55 anime pages
+- Multiple rendering strategies for optimal performance
+- Static page generation (SSG) for 100 anime detail pages
 - React Compiler enabled for automatic memoization
 - Optimized re-renders with useMemo hooks
 - 1-hour cache revalidation on API requests
@@ -144,10 +157,35 @@ interface AnimeItem {
 ## Build Information
 
 Last successful build:
-- 55 static pages generated
-- 50 anime detail pages (SSG with 1h revalidation)
+- 106 static pages generated
+- 100 anime detail pages (SSG with 1h revalidation)
 - TypeScript compilation passed
 - No errors or warnings
+
+### Route Types (from build output)
+```
+○  /           - Static (CSR)
+●  /anime/[id] - SSG (100 pre-rendered pages)
+○  /browse     - Static (Hybrid)
+ƒ  /search     - Dynamic (SSR)
+```
+
+## Rendering Strategies
+
+This project demonstrates all 4 Next.js rendering strategies. See `RenderingSg.md` for detailed examples.
+
+| Strategy | Page | Description |
+|----------|------|-------------|
+| **CSR** | `/` | Client-Side Rendering - Interactive dashboard with filters and search |
+| **SSG** | `/anime/[id]` | Static Site Generation - Pre-rendered detail pages with ISR |
+| **SSR** | `/search` | Server-Side Rendering - Fresh search results on every request |
+| **Hybrid** | `/browse` | Server + Client Components - Server fetches data, client handles interactivity |
+
+### When to Use Each
+- **CSR**: Heavy interactivity, real-time updates, user-specific state
+- **SSG**: Static content, SEO critical, maximum performance
+- **SSR**: Dynamic URLs, always-fresh data, SEO + personalization
+- **Hybrid**: Best of both - fast initial load + client interactivity
 
 ## Styling Architecture
 
@@ -199,6 +237,10 @@ Last successful build:
 - Category sections grid layout: 3-column (desktop), 2-column (tablet), 1-column (mobile)
 - Local SVG placeholder image instead of external placehold.co service
 - Image utility functions (getImageUrl, isPlaceholderImage) for consistent image handling
+- Implemented all 4 Next.js rendering strategies (CSR, SSG, SSR, Hybrid)
+- Added `/search` page with server-side rendering and shareable URLs
+- Added `/browse` page with hybrid rendering (server data + client interactivity)
+- Updated Header with navigation links and Browse button
 
 ## Configuration
 

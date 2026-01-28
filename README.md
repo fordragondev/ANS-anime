@@ -9,13 +9,13 @@ A modern web application that displays anime information from the Anime News Net
 
 ## Features
 
-- **Browse Anime** - View anime data fetched from Anime News Network API
-- **Search** - Real-time search modal with filtering
+- **Home Dashboard** - Interactive home with featured sections, filters, and search modal
+- **Browse Catalog** - Full anime catalog with type filtering and pagination (`/browse`)
+- **Search Page** - Server-rendered search with shareable URLs (`/search?q=...`)
+- **Anime Details** - Pre-rendered detail pages for each anime (`/anime/[id]`)
 - **Filter by Type** - Filter anime by type (TV, Movie, ONA, OVA, Special)
-- **Anime Details** - Individual pages with detailed anime information
 - **Dark Mode** - Automatic dark mode based on system preference
 - **Responsive Design** - Optimized for mobile, tablet, and desktop
-- **Pagination** - Load more functionality for browsing
 
 ## Tech Stack
 
@@ -65,10 +65,12 @@ Open [http://localhost:3000](http://localhost:3000) in your browser.
 ```
 src/
 ├── app/
-│   ├── anime/[id]/      # Dynamic anime detail pages
+│   ├── anime/[id]/      # Anime detail pages (SSG)
+│   ├── browse/          # Browse catalog (Hybrid)
+│   ├── search/          # Search results (SSR)
 │   ├── api/anime/       # API route
 │   ├── layout.tsx       # Root layout
-│   ├── page.tsx         # Home page
+│   ├── page.tsx         # Home page (CSR)
 │   └── globals.css      # Global styles
 ├── components/
 │   ├── sections/        # Page section components
@@ -107,11 +109,30 @@ This project uses the [Anime News Network Encyclopedia API](https://www.animenew
 - `reports.xml` - List of anime
 - `api.xml` - Detailed anime information
 
+## Rendering Strategies
+
+This project demonstrates all 4 Next.js rendering strategies:
+
+| Strategy | Route | Description |
+|----------|-------|-------------|
+| **CSR** | `/` | Client-Side Rendering - Interactive home with search modal |
+| **SSG** | `/anime/[id]` | Static Site Generation - 100 pre-rendered detail pages |
+| **SSR** | `/search` | Server-Side Rendering - Fresh search results each request |
+| **Hybrid** | `/browse` | Server + Client - Server data with client interactivity |
+
+See [RenderingSg.md](./RenderingSg.md) for detailed code examples.
+
 ## Performance
 
+- **Multiple rendering strategies** - Optimal strategy per page
 - **Static Site Generation (SSG)** - 100+ pages pre-rendered at build time
 - **React Compiler** - Automatic memoization enabled
 - **1-hour cache revalidation** - Fresh data with efficient caching
+
+## Documentation
+
+- **[CLAUDE.md](./CLAUDE.md)** - Detailed project documentation and architecture
+- **[RenderingSg.md](./RenderingSg.md)** - Next.js rendering strategies guide
 
 ## License
 
