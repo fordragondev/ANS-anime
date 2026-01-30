@@ -18,10 +18,11 @@
 
 import { useState, useMemo } from 'react';
 import Link from 'next/link';
-import { ArrowLeft, Filter } from 'lucide-react';
+import { Filter } from 'lucide-react';
 import { AnimeItem, AnimeType } from '@/types/anime';
-import { filterAnimeByType, getUniqueTypes } from '@/lib/utils';
+import { filterAnimeByType, getUniqueTypes, getTypeColor } from '@/lib/utils';
 import { ANIME_TYPES } from '@/lib/constants';
+import { SubPageHeader } from '@/components/SubPageHeader';
 
 interface BrowseClientProps {
   // Hybrid: Data comes from Server Component, no loading state needed
@@ -61,17 +62,6 @@ export default function BrowseClient({ initialData }: BrowseClientProps) {
     setDisplayCount((prev) => prev + ITEMS_PER_PAGE);
   };
 
-  const getTypeColor = (type: string) => {
-    const colors: Record<string, string> = {
-      ONA: 'bg-blue-600',
-      TV: 'bg-green-600',
-      Movie: 'bg-purple-600',
-      OVA: 'bg-orange-600',
-      Special: 'bg-pink-600',
-    };
-    return colors[type] || 'bg-gray-600';
-  };
-
   // Count anime by type for the filter badges
   const typeCounts = useMemo(() => {
     const counts: Record<string, number> = { All: initialData.length };
@@ -83,24 +73,16 @@ export default function BrowseClient({ initialData }: BrowseClientProps) {
 
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      {/* Header */}
-      <header className="bg-primary text-white py-4 shadow-md">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8 flex items-center justify-between">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity focus-visible:ring-2 focus-visible:ring-white/50 rounded"
-          >
-            <ArrowLeft size={20} />
-            <span className="font-semibold">Back to Home</span>
-          </Link>
+      <SubPageHeader
+        rightContent={
           <Link
             href="/search"
             className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity"
           >
             Search
           </Link>
-        </div>
-      </header>
+        }
+      />
 
       {/* Filter Bar */}
       <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800 sticky top-0 z-40">

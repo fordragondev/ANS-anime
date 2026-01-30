@@ -53,3 +53,14 @@ export function getImageUrl(imageUrl: string | undefined): string {
 export function isPlaceholderImage(url: string): boolean {
   return url === PLACEHOLDER_IMAGE || url.includes('placehold.co');
 }
+
+export function getTypeColor(type: string): string {
+  const colors: Record<string, string> = {
+    ONA: 'bg-blue-600',
+    TV: 'bg-green-600',
+    Movie: 'bg-purple-600',
+    OVA: 'bg-orange-600',
+    Special: 'bg-pink-600',
+  };
+  return colors[type] || 'bg-gray-600';
+}

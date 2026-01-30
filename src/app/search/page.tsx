@@ -29,9 +29,10 @@
  * @see /browse/page.tsx for Hybrid example
  */
 import Link from 'next/link';
-import { ArrowLeft, Search } from 'lucide-react';
+import { Search } from 'lucide-react';
 import { fetchAnimeData } from '@/lib/api';
-import { searchAnimeByName } from '@/lib/utils';
+import { searchAnimeByName, getTypeColor } from '@/lib/utils';
+import { SubPageHeader } from '@/components/SubPageHeader';
 
 // SSR: Force dynamic rendering - page is rendered fresh on every request
 // This ensures search results always use the latest data
@@ -67,31 +68,9 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
   const allAnime = await fetchAnimeData();
   const results = query ? searchAnimeByName(allAnime, query) : [];
 
-  const getTypeColor = (type: string) => {
-    const colors: Record<string, string> = {
-      ONA: 'bg-blue-600',
-      TV: 'bg-green-600',
-      Movie: 'bg-purple-600',
-      OVA: 'bg-orange-600',
-      Special: 'bg-pink-600',
-    };
-    return colors[type] || 'bg-gray-600';
-  };
-
   return (
     <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-      {/* Header */}
-      <header className="bg-primary text-white py-4 shadow-md">
-        <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-          <Link
-            href="/"
-            className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity focus-visible:ring-2 focus-visible:ring-white/50 rounded"
-          >
-            <ArrowLeft size={20} />
-            <span className="font-semibold">Back to Home</span>
-          </Link>
-        </div>
-      </header>
+      <SubPageHeader />
 
       {/* Search Form */}
       <div className="bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-800">

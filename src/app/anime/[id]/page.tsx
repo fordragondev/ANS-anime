@@ -31,9 +31,9 @@
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
-import { ArrowLeft } from 'lucide-react';
 import { fetchAnimeData } from '@/lib/api';
-import { formatDate, PLACEHOLDER_IMAGE } from '@/lib/utils';
+import { formatDate, getTypeColor, PLACEHOLDER_IMAGE } from '@/lib/utils';
+import { SubPageHeader } from '@/components/SubPageHeader';
 
 interface AnimeDetailPageProps {
   params: Promise<{ id: string }>;
@@ -100,31 +100,9 @@ export default async function AnimeDetailPage({ params }: AnimeDetailPageProps) 
       notFound();
     }
 
-    const getTypeColor = (type: string) => {
-      const colors: Record<string, string> = {
-        ONA: 'bg-blue-600',
-        TV: 'bg-green-600',
-        Movie: 'bg-purple-600',
-        OVA: 'bg-orange-600',
-        Special: 'bg-pink-600',
-      };
-      return colors[type] || 'bg-gray-600';
-    };
-
     return (
       <div className="min-h-screen bg-gray-50 dark:bg-gray-950">
-        {/* Header */}
-        <header className="bg-primary text-white py-4 shadow-md">
-          <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-            <Link
-              href="/"
-              className="inline-flex items-center gap-2 hover:opacity-80 transition-opacity focus-visible:ring-2 focus-visible:ring-white/50 rounded"
-            >
-              <ArrowLeft size={20} />
-              <span className="font-semibold">Back to Home</span>
-            </Link>
-          </div>
-        </header>
+        <SubPageHeader />
 
         {/* Main Content */}
         <main className="container mx-auto px-4 sm:px-6 lg:px-8 py-6 sm:py-8">
