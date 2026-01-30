@@ -13,59 +13,29 @@ A modern Next.js application that displays anime information from the Anime News
 - **Icons**: lucide-react
 
 ## Project Structure
+- `src/app/` - App Router pages and layouts
+- `src/components/` - Reusable React components
+- `src/lib/` - Utility functions and shared code
+- `src/hooks/` - Custom React hooks
+- `public/` - Static assets
 
-```
-anime-news/
-├── public/
-│   └── placeholder-anime.svg    # Default placeholder image for missing images
-├── src/
-│   ├── app/
-│   │   ├── anime/[id]/
-│   │   │   ├── page.tsx          # Anime detail pages (SSG)
-│   │   │   └── not-found.tsx     # 404 page for anime
-│   │   ├── api/
-│   │   │   └── anime/
-│   │   │       └── route.ts      # API route for anime data
-│   │   ├── browse/
-│   │   │   ├── page.tsx          # Browse catalog (Hybrid - Server Component)
-│   │   │   └── BrowseClient.tsx  # Browse interactivity (Hybrid - Client Component)
-│   │   ├── search/
-│   │   │   └── page.tsx          # Search results (SSR)
-│   │   ├── layout.tsx            # Root layout
-│   │   ├── page.tsx              # Home page (CSR)
-│   │   ├── globals.css           # Global styles
-│   │   └── favicon.ico
-│   ├── components/
-│   │   ├── sections/             # Section components
-│   │   │   ├── TopStory.tsx      # Hero section with featured anime
-│   │   │   ├── TopPicks.tsx      # Top picks grid (3-column)
-│   │   │   ├── LatestNews.tsx    # Latest news list with filters
-│   │   │   ├── CategorySection.tsx # Category section with featured + links
-│   │   │   └── LoadingSkeletons.tsx # Loading skeleton components
-│   │   ├── Header.tsx            # Navigation header with search
-│   │   ├── SectionHeader.tsx     # Reusable section header with divider
-│   │   ├── AnimeCard.tsx         # Individual anime card
-│   │   ├── FilterDropdown.tsx    # Type filter dropdown
-│   │   ├── SearchModal.tsx       # Search overlay
-│   │   ├── ErrorBoundary.tsx     # Error boundary component
-│   │   └── ThemeProvider.tsx     # Theme state management
-│   ├── hooks/
-│   │   ├── useAnimeData.ts       # Fetch and cache anime data
-│   │   ├── useSearch.ts          # Search functionality
-│   │   └── useSectionData.ts     # Section data organization
-│   ├── lib/
-│   │   ├── api.ts                # API functions (fetchAnimeData)
-│   │   ├── animeDetails.ts       # Fetch detailed anime info
-│   │   ├── utils.ts              # Utility functions + image helpers
-│   │   └── constants.ts          # App constants
-│   └── types/
-│       └── anime.ts              # TypeScript types
-├── package.json
-├── tsconfig.json
-├── next.config.ts
-├── postcss.config.mjs
-└── eslint.config.mjs
-```
+## Conventions
+- Use Server Components by default, add 'use client' only when needed
+- Prefer named exports for components
+- Follow the Next.js file-based routing conventions
+- Use next/image for optimized images
+- Use next/link for client-side navigation
+
+## Code Style
+- Use functional components with TypeScript
+- Prefer async/await over .then() chains
+- Use early returns for cleaner code
+- Keep components small and focused
+
+## Configuration
+- Local SVG placeholder for missing images (no external dependencies)
+- Tailwind CSS: No config file needed (CSS-based configuration in v4)
+- Dark Mode: ThemeProvider manages `dark` class on `<html>` (system preference in prod, manual toggle in dev)
 
 ## Features
 
@@ -90,13 +60,10 @@ anime-news/
 - "Load More" pagination for better performance
 - Loading states with skeleton cards
 - Error handling with retry functionality
-- Dark mode support (system preference + manual toggle in dev mode)
-- Dev-only dark mode toggle (manual theme switching for testing)
+- Dark mode support (system preference + dev-only manual toggle)
 
 ### Performance
-- Multiple rendering strategies for optimal performance
-- Static page generation (SSG) for 100 anime detail pages
-- React Compiler enabled for automatic memoization
+- Multiple rendering strategies (see Rendering Strategies section)
 - Optimized re-renders with useMemo hooks
 - 1-hour cache revalidation on API requests
 
@@ -154,22 +121,6 @@ interface AnimeItem {
 }
 ```
 
-## Build Information
-
-Last successful build:
-- 106 static pages generated
-- 100 anime detail pages (SSG with 1h revalidation)
-- TypeScript compilation passed
-- No errors or warnings
-
-### Route Types (from build output)
-```
-○  /           - Static (CSR)
-●  /anime/[id] - SSG (100 pre-rendered pages)
-○  /browse     - Static (Hybrid)
-ƒ  /search     - Dynamic (SSR)
-```
-
 ## Rendering Strategies
 
 This project demonstrates all 4 Next.js rendering strategies. See `RenderingSg.md` for detailed examples.
@@ -200,58 +151,6 @@ This project demonstrates all 4 Next.js rendering strategies. See `RenderingSg.m
 - **Accent**: #DC2626 (Red) - `bg-accent`
 - **Tailwind Colors**: `bg-white dark:bg-gray-900`, `text-gray-600 dark:text-gray-400`
 - **No custom semantic colors**: Removed card-bg, hover-bg, text-muted in favor of Tailwind
-
-### Dark Mode
-- **Tailwind CSS v4**: Automatic support for both `@media (prefers-color-scheme: dark)` and `.dark` class
-- **Class-based toggle**: ThemeProvider adds/removes `dark` class on `<html>` element
-- **Production**: Respects system preference only
-- **Development**: Manual toggle button in header for easy testing
-
-## Future Enhancements
-
-- Add anime descriptions and images
-- Implement favorites/bookmarking
-- Add sorting options (by name, date, type)
-- Infinite scroll option
-- Export anime list to CSV/JSON
-- User preferences persistence (localStorage)
-- Advanced filtering (by year, season)
-- Share anime links
-- Anime comparison feature
-
-## Development Notes
-
-- Uses Next.js 16 App Router with Server/Client Components
-- React 19 features enabled
-- TypeScript strict mode enforced
-- Tailwind CSS 4 with inline theme configuration
-- Git repository initialized (master branch)
-
-### Recent Optimizations (2026-01)
-- Cleaned globals.css: Reduced from ~220 lines to ~80 lines (68% reduction)
-- Standardized to Tailwind color system across all components
-- Removed redundant CSS and unused utility classes
-- Added dev-only dark mode toggle for easier theme testing
-- Removed unused components (FeaturedArticle, LoadingCard, dataTransform)
-- Added section components (TopStory, TopPicks, LatestNews, CategorySection)
-- Category sections grid layout: 3-column (desktop), 2-column (tablet), 1-column (mobile)
-- Local SVG placeholder image instead of external placehold.co service
-- Image utility functions (getImageUrl, isPlaceholderImage) for consistent image handling
-- Implemented all 4 Next.js rendering strategies (CSR, SSG, SSR, Hybrid)
-- Added `/search` page with server-side rendering and shareable URLs
-- Added `/browse` page with hybrid rendering (server data + client interactivity)
-- Updated Header with navigation links and Browse button
-
-## Configuration
-
-### Next.js Config
-- React Compiler enabled
-- Local SVG placeholder for missing images (no external dependencies)
-
-### Tailwind CSS
-- Version 4 (PostCSS-based)
-- Dark mode: Automatic (supports both class and media query)
-- No config file needed (CSS-based configuration)
 
 ## Browser Support
 
