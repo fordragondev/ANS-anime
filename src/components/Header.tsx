@@ -15,21 +15,9 @@ export default function Header({ onSearchClick }: HeaderProps) {
   return (
     <header className="bg-primary text-white sticky top-0 z-50 shadow-md">
       <div className="container mx-auto px-4 py-4 flex items-center justify-between">
-        <div className="flex items-center gap-6">
-          <Link href="/" className="text-2xl font-bold hover:opacity-90 transition-opacity">
-            Anime News
-          </Link>
-          {/* Navigation Links */}
-          <nav className="hidden sm:flex items-center gap-4">
-            <Link
-              href="/browse"
-              className="flex items-center gap-1.5 text-sm font-medium hover:bg-white/10 px-3 py-1.5 rounded transition-colors"
-            >
-              <LayoutGrid size={16} />
-              Browse
-            </Link>
-          </nav>
-        </div>
+        <Link href="/" className="text-2xl font-bold hover:opacity-90 transition-opacity">
+          Anime News
+        </Link>
 
         <div className="flex items-center gap-2 md:gap-4">
           {/* Search - opens modal on home, links to /search elsewhere */}
@@ -41,13 +29,14 @@ export default function Header({ onSearchClick }: HeaderProps) {
             <Search size={24} />
           </button>
 
-          {/* Mobile Browse Link */}
+          {/* Browse Link */}
           <Link
             href="/browse"
-            className="sm:hidden p-2 hover:bg-white/10 rounded-full transition-colors focus-visible:ring-2 focus-visible:ring-white/50"
+            className="flex items-center gap-1.5 p-2 hover:bg-white/10 rounded-full sm:rounded sm:px-3 sm:py-1.5 transition-colors focus-visible:ring-2 focus-visible:ring-white/50"
             aria-label="Browse anime"
           >
-            <LayoutGrid size={24} />
+            <LayoutGrid size={24} className="sm:w-4 sm:h-4" />
+            <span className="hidden sm:inline text-sm font-medium">Browse</span>
           </Link>
 
           {/* Dev-only dark mode toggle */}
