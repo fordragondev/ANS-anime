@@ -41,10 +41,10 @@ import {
   LatestNewsSkeleton,
   CategorySectionSkeleton,
 } from '@/components/sections/LoadingSkeletons';
-import SearchModal from '@/components/SearchModal';
+import { SearchModalSwr } from '@/components/SearchModalSwr';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { useAnimeData } from '@/hooks/useAnimeData';
-import { useSectionData } from '@/hooks/useSectionData';
+import { useSectionDataSwr } from '@/hooks/useSectionDataSwr';
 import { useSearch } from '@/hooks/useSearch';
 import { filterAnimeByType, getUniqueTypes } from '@/lib/utils';
 import { SECTION_ALLOCATION } from '@/lib/constants';
@@ -54,7 +54,7 @@ export default function Home() {
   // CSR: Data is fetched in the browser after initial render
   // The useAnimeData hook handles fetching, caching, and error states
   const { data, isLoading, error, refetch } = useAnimeData();
-  const { sectionData, isLoadingDetails } = useSectionData(data);
+  const { sectionData, isLoadingDetails } = useSectionDataSwr(data);
   const [selectedType, setSelectedType] = useState<AnimeType>('All');
   const [latestNewsCount, setLatestNewsCount] = useState(SECTION_ALLOCATION.LATEST_NEWS_INITIAL);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
@@ -181,13 +181,10 @@ export default function Home() {
         </main>
 
         {/* Search Modal */}
-        <SearchModal
-          isOpen={isSearchOpen}
-          onClose={handleSearchClose}
-          query={query}
-          onQueryChange={setQuery}
-          results={results}
-        />
+        <SearchModalSwr.Root isOpen={isSearchOpen} onClose={handleSearchClose}>
+          <SearchModalSwr.Input query={query} onQueryChange={setQuery} />
+          <SearchModalSwr.Results query={query} results={results} />
+        </SearchModalSwr.Root>
       </div>
     </ErrorBoundary>
   );
