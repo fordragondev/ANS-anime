@@ -35,7 +35,7 @@ export function DesignProvider({ children }: { children: ReactNode }) {
   if (!mounted) {
     return (
       <DesignContext.Provider value={{ activeDesign: "v1", toggleDesign }}>
-        <div style={{ visibility: "hidden" }}>{children}</div>
+        {children}
       </DesignContext.Provider>
     );
   }
