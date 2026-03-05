@@ -1,6 +1,6 @@
 "use client";
 
-import { createContext, useContext, useState, ReactNode, useEffect } from "react";
+import { createContext, use, useState, ReactNode, useEffect } from "react";
 
 type DesignVersion = "v1" | "v2";
 
@@ -48,7 +48,7 @@ export function DesignProvider({ children }: { children: ReactNode }) {
 }
 
 export const useDesign = () => {
-  const context = useContext(DesignContext);
+  const context = use(DesignContext);
   if (!context) throw new Error("useDesign must be used within DesignProvider");
   return context;
 };
