@@ -20,6 +20,15 @@
   --color-primary: var(--primary);
   --color-secondary: var(--secondary);
   --color-accent: var(--accent);
+
+  /* V2 specific colors from Stitch Design */
+  --color-v2-primary: #2b7cee;
+  --color-v2-background-light: #f6f7f8;
+  --color-v2-background-dark: #0a0f16;
+  --color-v2-surface-dark: #161f2c;
+  --color-v2-border-dark: #232e3e;
+  
+  --font-display: "Space Grotesk", sans-serif;
 }
 
 /* Dark mode: System preference */
