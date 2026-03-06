@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { AnimeItem } from '@/types/anime';
 
 export function useAnimeData() {
@@ -8,7 +8,7 @@ export function useAnimeData() {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState<Error | null>(null);
 
-  const fetchData = async (retryCount = 0) => {
+  const fetchData = useCallback(async (retryCount = 0) => {
     try {
       setIsLoading(true);
       setError(null);
@@ -33,11 +33,11 @@ export function useAnimeData() {
         setIsLoading(false);
       }
     }
-  };
+  }, []);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [fetchData]);
 
   const refetch = () => fetchData();
 

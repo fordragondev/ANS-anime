@@ -3,7 +3,7 @@
 import React, { createContext, useContext, useEffect, useRef } from 'react';
 import { X, Search } from 'lucide-react';
 import { AnimeItem } from '@/types/anime';
-import AnimeCard from './AnimeCard';
+import AnimeCard from '@/components/AnimeCard';
 
 interface SearchModalContextType {
     isOpen: boolean;
@@ -116,7 +116,7 @@ export function Results({
         <div className="p-6 max-h-[60vh] overflow-y-auto">
             {query && results.length === 0 ? (
                 <p className="text-center text-gray-500 dark:text-gray-400 py-8">
-                    No results found for "{query}"
+                    No results found for &ldquo;{query}&rdquo;
                 </p>
             ) : query && results.length > 0 ? (
                 <>

@@ -1,12 +1,12 @@
 /**
- * HOME PAGE - Client-Side Rendering (CSR) Strategy
+ * HOME PAGE V1 - Client-Side Rendering (CSR) Strategy
  *
  * RENDERING STRATEGY: CSR (Client-Side Rendering)
  *
  * How it works:
  * 1. The 'use client' directive marks this as a Client Component
  * 2. Initial HTML is sent with a loading skeleton (no data)
- * 3. React hydrates in the browser and fetches data via useAnimeData() hook
+ * 3. React hydrates in the browser and fetches data via useHomeV1Data() hook
  * 4. UI updates dynamically as data arrives
  *
  * Why CSR for this page:
@@ -29,65 +29,47 @@
  */
 'use client';
 
-import { useState, useMemo } from 'react';
-import Header from '@/components/Header';
-import TopStory from '@/components/sections/TopStory';
-import TopPicks from '@/components/sections/TopPicks';
-import LatestNews from '@/components/sections/LatestNews';
-import CategorySection from '@/components/sections/CategorySection';
+import { useState } from 'react';
+import Header from '@/features/home-v1/components/Header';
+import TopStory from '@/features/home-v1/components/TopStory';
+import TopPicks from '@/features/home-v1/components/TopPicks';
+import LatestNews from '@/features/home-v1/components/LatestNews';
+import CategorySection from '@/features/home-v1/components/CategorySection';
 import {
     TopStorySkeleton,
     TopPicksSkeleton,
     LatestNewsSkeleton,
     CategorySectionSkeleton,
-} from '@/components/sections/LoadingSkeletons';
-import { SearchModalSwr } from '@/components/SearchModalSwr';
+} from '@/features/home-v1/components/LoadingSkeletons';
+import { SearchModalSwr } from '@/features/home-v1/components/SearchModalSwr';
 import ErrorBoundary from '@/components/ErrorBoundary';
+import { useHomeV1Data } from '@/features/home-v1/hooks/useHomeV1Data';
+import { useSearch } from '@/features/home-v1/hooks/useSearch';
 import { useAnimeData } from '@/hooks/useAnimeData';
-import { useSectionDataSwr } from '@/hooks/useSectionDataSwr';
-import { useSearch } from '@/hooks/useSearch';
-import { filterAnimeByType, getUniqueTypes } from '@/lib/utils';
-import { SECTION_ALLOCATION } from '@/lib/constants';
-import { AnimeType } from '@/types/anime';
 
 export function HomeV1() {
-    // CSR: Data is fetched in the browser after initial render
-    // The useAnimeData hook handles fetching, caching, and error states
-    const { data, isLoading, error, refetch } = useAnimeData();
-    const { sectionData, isLoadingDetails } = useSectionDataSwr(data);
-    const [selectedType, setSelectedType] = useState<AnimeType>('All');
-    const [latestNewsCount, setLatestNewsCount] = useState(SECTION_ALLOCATION.LATEST_NEWS_INITIAL);
+    const {
+        sectionData,
+        filteredLatestNews,
+        showLoading,
+        error,
+        refetch,
+        uniqueTypes,
+        selectedType,
+        handleTypeChange,
+        handleLoadMore,
+        hasMoreNews,
+        isLoadingDetails,
+    } = useHomeV1Data();
+
+    // Search needs raw anime data for searching across all items
+    const { data } = useAnimeData();
     const [isSearchOpen, setIsSearchOpen] = useState(false);
-
     const { query, setQuery, results, clearSearch } = useSearch(data);
-
-    const uniqueTypes = useMemo(() => getUniqueTypes(data), [data]);
-
-    // Filter latest news by type
-    const filteredLatestNews = useMemo(() => {
-        if (!sectionData) return [];
-        const filtered = filterAnimeByType(sectionData.latestNews, selectedType);
-        return filtered.slice(0, latestNewsCount);
-    }, [sectionData, selectedType, latestNewsCount]);
-
-    const handleLoadMore = () => {
-        setLatestNewsCount((prev) => prev + SECTION_ALLOCATION.LATEST_NEWS_LOAD_MORE);
-    };
-
-    const hasMoreNews = useMemo(() => {
-        if (!sectionData) return false;
-        const totalFiltered = filterAnimeByType(sectionData.latestNews, selectedType).length;
-        return latestNewsCount < totalFiltered;
-    }, [sectionData, selectedType, latestNewsCount]);
 
     const handleSearchClose = () => {
         setIsSearchOpen(false);
         clearSearch();
-    };
-
-    const handleTypeChange = (type: string) => {
-        setSelectedType(type as AnimeType);
-        setLatestNewsCount(SECTION_ALLOCATION.LATEST_NEWS_INITIAL);
     };
 
     if (error) {
@@ -108,10 +90,6 @@ export function HomeV1() {
             </div>
         );
     }
-
-    // CSR: Show loading skeleton while data is being fetched client-side
-    // This provides visual feedback during the data fetch phase
-    const showLoading = isLoading || (data.length > 0 && isLoadingDetails && !sectionData);
 
     return (
         <ErrorBoundary>

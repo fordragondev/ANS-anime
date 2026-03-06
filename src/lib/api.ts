@@ -32,7 +32,7 @@ export async function fetchAnimeData(): Promise<AnimeItem[]> {
     // Convert to array if it's a single item
     const itemsArray = Array.isArray(items) ? items : [items];
 
-    return itemsArray.map((item: any) => ({
+    return itemsArray.map((item: { id?: string; type?: string; name?: string; vintage?: string }) => ({
       id: item.id || '',
       type: item.type || 'Unknown',
       name: item.name || 'Untitled',

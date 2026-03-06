@@ -1,11 +1,11 @@
-import { render, screen } from '@testing-library/react';
+import { render } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import {
   TopStorySkeleton,
   TopPicksSkeleton,
   LatestNewsSkeleton,
   CategorySectionSkeleton,
-} from '@/components/sections/LoadingSkeletons';
+} from '@/features/home-v1/components/LoadingSkeletons';
 
 describe('LoadingSkeletons', () => {
   describe('TopStorySkeleton', () => {

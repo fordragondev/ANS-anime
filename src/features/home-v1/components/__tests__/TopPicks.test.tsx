@@ -1,28 +1,32 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import TopPicks from '@/components/sections/TopPicks';
+import TopPicks from '@/features/home-v1/components/TopPicks';
 import { AnimeDetailItem } from '@/types/anime';
 
 // Mock next/link
 jest.mock('next/link', () => {
-  return ({ children, href, className }: { children: React.ReactNode; href: string; className?: string }) => (
+  const MockLink = ({ children, href, className }: { children: React.ReactNode; href: string; className?: string }) => (
     <a href={href} className={className}>{children}</a>
   );
+  MockLink.displayName = 'MockLink';
+  return MockLink;
 });
 
 // Mock next/image
 jest.mock('next/image', () => {
-  return ({ src, alt, className }: { src: string; alt: string; className?: string }) => (
+  const MockImage = ({ src, alt, className }: { src: string; alt: string; className?: string }) => (
     // eslint-disable-next-line @next/next/no-img-element
     <img src={src} alt={alt} className={className} data-testid="anime-image" />
   );
+  MockImage.displayName = 'MockImage';
+  return MockImage;
 });
 
 // Mock lucide-react
 jest.mock('lucide-react', () => ({
-  MessageCircle: ({ className }: { className?: string }) => (
-    <span data-testid="message-icon" className={className}>💬</span>
-  ),
+  MessageCircle: function MockMessageCircle({ className }: { className?: string }) {
+    return <span data-testid="message-icon" className={className}>💬</span>;
+  },
 }));
 
 const createMockAnime = (overrides: Partial<AnimeDetailItem> = {}): AnimeDetailItem => ({

@@ -1,17 +1,21 @@
 "use client";
 
 import React from "react";
+import Image from "next/image";
+import { V2Featured } from "@/features/home-v2/types";
 
-export function HeroSection({ featured }: { featured: any }) {
+export function HeroSection({ featured }: { featured: V2Featured }) {
     if (!featured) return null;
 
     return (
         <div className="lg:col-span-2 group relative overflow-hidden rounded-2xl bg-v2-surface-dark border border-v2-border-dark">
             <div className="relative h-[400px] sm:h-[500px] w-full">
-                <img
+                <Image
                     alt="Top Story Hero"
                     className="h-full w-full object-cover transition-transform duration-700 group-hover:scale-105"
                     src={featured.image}
+                    fill
+                    sizes="(max-width: 1024px) 100vw, 66vw"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-v2-background-dark via-v2-background-dark/30 to-transparent"></div>
                 <div className="absolute top-4 right-4 z-10">

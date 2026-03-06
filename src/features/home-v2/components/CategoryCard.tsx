@@ -30,10 +30,12 @@ function CategoryCardHero() {
     const { data } = use(CategoryCardContext)!;
     return (
         <div className="relative group aspect-[16/9] cursor-pointer">
-            <img
+            <Image
                 alt={data.title}
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 src={data.heroImage}
+                fill
+                sizes="(max-width: 768px) 100vw, 33vw"
             />
             <div className="absolute inset-0 bg-gradient-to-t from-v2-background-dark via-transparent to-transparent"></div>
             <button className="absolute top-4 right-4 z-10 text-white/70 hover:text-v2-primary transition-colors">

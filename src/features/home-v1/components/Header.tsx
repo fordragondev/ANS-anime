@@ -2,7 +2,7 @@
 
 import Link from 'next/link';
 import { Search, User, Moon, Sun, LayoutGrid } from 'lucide-react';
-import { useTheme } from './ThemeProvider';
+import { useTheme } from '@/components/ThemeProvider';
 
 interface HeaderProps {
   onSearchClick: () => void;

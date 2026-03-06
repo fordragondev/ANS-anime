@@ -2,8 +2,9 @@
 
 import React from "react";
 import { NewsCard } from "./NewsCard";
+import { V2NewsItem } from "@/features/home-v2/types";
 
-export function LatestNewsSection({ news }: { news: any[] }) {
+export function LatestNewsSection({ news }: { news: V2NewsItem[] }) {
     return (
         <section className="space-y-6">
             <div className="flex items-center justify-between">

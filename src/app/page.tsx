@@ -16,8 +16,8 @@ import { useDesign } from "@/components/DesignProvider";
 
 // Using next/dynamic ensures that clients only download the javascript
 // for the version of the homepage they are actively viewing.
-const HomeV1 = dynamic(() => import("./HomeV1").then((mod) => mod.HomeV1));
-const HomeV2 = dynamic(() => import("./HomeV2").then((mod) => mod.HomeV2));
+const HomeV1 = dynamic(() => import("@/features/home-v1/HomeV1").then((mod) => mod.HomeV1));
+const HomeV2 = dynamic(() => import("@/features/home-v2/HomeV2").then((mod) => mod.HomeV2));
 
 export default function Home() {
   const { activeDesign } = useDesign();

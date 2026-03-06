@@ -5,17 +5,21 @@ import { AnimeItem } from '@/types/anime';
 
 // Mock next/link
 jest.mock('next/link', () => {
-  return ({ children, href, className }: { children: React.ReactNode; href: string; className?: string }) => (
+  const MockLink = ({ children, href, className }: { children: React.ReactNode; href: string; className?: string }) => (
     <a href={href} className={className}>{children}</a>
   );
+  MockLink.displayName = 'MockLink';
+  return MockLink;
 });
 
 // Mock next/image - filter out Next.js specific props
 jest.mock('next/image', () => {
-  return ({ src, alt, className }: { src: string; alt: string; className?: string }) => (
+  const MockImage = ({ src, alt, className }: { src: string; alt: string; className?: string }) => (
     // eslint-disable-next-line @next/next/no-img-element
     <img src={src} alt={alt} className={className} data-testid="anime-image" />
   );
+  MockImage.displayName = 'MockImage';
+  return MockImage;
 });
 
 const createMockAnime = (overrides: Partial<AnimeItem> = {}): AnimeItem => ({

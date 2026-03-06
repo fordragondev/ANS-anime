@@ -2,10 +2,11 @@
 
 import { useMemo } from "react";
 import { useAnimeData } from "@/hooks/useAnimeData";
-import { useSectionDataSwr } from "@/hooks/useSectionDataSwr";
+import { useDetailsSwr } from "@/hooks/useDetailsSwr";
 import { AnimeDetailItem } from "@/types/anime";
+import { V2PageData } from "@/features/home-v2/types";
 
-// Helper to assign random or consistent colors based on anime type/category
+// Helper to assign colors based on anime type/category
 function getColorClasses(type: string) {
     const typeLower = type ? type.toLowerCase() : "";
 
@@ -24,14 +25,14 @@ function getColorClasses(type: string) {
 }
 
 export function useHomeV2Data() {
-    // 1. Fetch raw anime data like HomeV1
+    // 1. Fetch raw anime data (shared)
     const { data: rawAnime, isLoading: isFetchingRaw, error } = useAnimeData();
 
-    // 2. Fetch detailed stats via SWR like HomeV1
-    const { sectionData, isLoadingDetails } = useSectionDataSwr(rawAnime);
+    // 2. Fetch detailed stats via SWR (shared utility)
+    const { sectionData, isLoadingDetails } = useDetailsSwr(rawAnime);
 
     // 3. Map to exactly the shape the V2 Components expect
-    const mappedData = useMemo(() => {
+    const mappedData = useMemo((): V2PageData | null => {
         if (!sectionData) return null;
 
         const getImageUrl = (item: AnimeDetailItem) => item.imageUrl || "";
@@ -44,7 +45,7 @@ export function useHomeV2Data() {
                 comments: sectionData.topStory.voteCount,
                 image: getImageUrl(sectionData.topStory)
             },
-            topPicks: sectionData.topPicks.map((pick, i) => {
+            topPicks: sectionData.topPicks.map((pick) => {
                 const { colorClass } = getColorClasses(pick.type);
                 return {
                     id: pick.id,

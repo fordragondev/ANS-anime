@@ -1,28 +1,34 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import TopStory from '@/components/sections/TopStory';
+import TopStory from '@/features/home-v1/components/TopStory';
 import { AnimeDetailItem } from '@/types/anime';
 
 // Mock next/link
 jest.mock('next/link', () => {
-  return ({ children, href, className }: { children: React.ReactNode; href: string; className?: string }) => (
+  const MockLink = ({ children, href, className }: { children: React.ReactNode; href: string; className?: string }) => (
     <a href={href} className={className}>{children}</a>
   );
+  MockLink.displayName = 'MockLink';
+  return MockLink;
 });
 
 // Mock next/image - filter out Next.js specific props
 jest.mock('next/image', () => {
-  return ({ src, alt, className }: { src: string; alt: string; className?: string }) => (
+  const MockImage = ({ src, alt, className }: { src: string; alt: string; className?: string }) => (
     // eslint-disable-next-line @next/next/no-img-element
     <img src={src} alt={alt} className={className} data-testid="anime-image" />
   );
+  MockImage.displayName = 'MockImage';
+  return MockImage;
 });
 
 // Mock SectionHeader
 jest.mock('@/components/SectionHeader', () => {
-  return ({ title }: { title: string }) => (
+  const MockSectionHeader = ({ title }: { title: string }) => (
     <div data-testid="section-header">{title}</div>
   );
+  MockSectionHeader.displayName = 'MockSectionHeader';
+  return MockSectionHeader;
 });
 
 const createMockAnime = (overrides: Partial<AnimeDetailItem> = {}): AnimeDetailItem => ({

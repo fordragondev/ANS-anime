@@ -2,8 +2,9 @@
 
 import React from "react";
 import { CategoryCard } from "./CategoryCard";
+import { V2Category } from "@/features/home-v2/types";
 
-export function CategoryHubSection({ categories }: { categories: any[] }) {
+export function CategoryHubSection({ categories }: { categories: V2Category[] }) {
     return (
         <section className="space-y-8">
             <div className="flex items-center justify-between">

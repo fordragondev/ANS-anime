@@ -13,7 +13,7 @@ export function DesignProvider({ children }: { children: ReactNode }) {
   const [activeDesign, setActiveDesign] = useState<DesignVersion>("v1");
   const [mounted, setMounted] = useState(false);
 
-  // Use localStorage to remember the user's choice across reloads
+  // Client-only mount detection — required for SSR/hydration in Next.js.
   useEffect(() => {
     setMounted(true);
     const saved = localStorage.getItem("selectedDesign");
@@ -30,8 +30,7 @@ export function DesignProvider({ children }: { children: ReactNode }) {
     });
   };
 
-  // Prevent hydration mismatch by optionally rendering children only after mount, 
-  // or just returning the default (v1) on the server.
+  // Prevent hydration mismatch by returning default (v1) on the server.
   if (!mounted) {
     return (
       <DesignContext.Provider value={{ activeDesign: "v1", toggleDesign }}>

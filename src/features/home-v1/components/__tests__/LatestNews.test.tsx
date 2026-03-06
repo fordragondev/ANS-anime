@@ -1,36 +1,40 @@
 import { render, screen, fireEvent } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import LatestNews from '@/components/sections/LatestNews';
+import LatestNews from '@/features/home-v1/components/LatestNews';
 import { AnimeDetailItem } from '@/types/anime';
 
 // Mock next/link
 jest.mock('next/link', () => {
-  return ({ children, href, className }: { children: React.ReactNode; href: string; className?: string }) => (
+  const MockLink = ({ children, href, className }: { children: React.ReactNode; href: string; className?: string }) => (
     <a href={href} className={className}>{children}</a>
   );
+  MockLink.displayName = 'MockLink';
+  return MockLink;
 });
 
 // Mock next/image
 jest.mock('next/image', () => {
-  return ({ src, alt, className }: { src: string; alt: string; className?: string }) => (
+  const MockImage = ({ src, alt, className }: { src: string; alt: string; className?: string }) => (
     // eslint-disable-next-line @next/next/no-img-element
     <img src={src} alt={alt} className={className} data-testid="anime-image" />
   );
+  MockImage.displayName = 'MockImage';
+  return MockImage;
 });
 
 // Mock lucide-react
 jest.mock('lucide-react', () => ({
-  Settings: ({ className }: { className?: string }) => (
-    <span data-testid="settings-icon" className={className}>⚙️</span>
-  ),
-  Bookmark: ({ className }: { className?: string }) => (
-    <span data-testid="bookmark-icon" className={className}>🔖</span>
-  ),
+  Settings: function MockSettings({ className }: { className?: string }) {
+    return <span data-testid="settings-icon" className={className}>⚙️</span>;
+  },
+  Bookmark: function MockBookmark({ className }: { className?: string }) {
+    return <span data-testid="bookmark-icon" className={className}>🔖</span>;
+  },
 }));
 
 // Mock FilterDropdown
 jest.mock('@/components/FilterDropdown', () => {
-  return ({ types, selectedType, onTypeChange }: { types: string[]; selectedType: string; onTypeChange: (type: string) => void }) => (
+  const MockFilterDropdown = ({ types, selectedType, onTypeChange }: { types: string[]; selectedType: string; onTypeChange: (type: string) => void }) => (
     <select
       data-testid="filter-dropdown"
       value={selectedType}
@@ -41,6 +45,8 @@ jest.mock('@/components/FilterDropdown', () => {
       ))}
     </select>
   );
+  MockFilterDropdown.displayName = 'MockFilterDropdown';
+  return MockFilterDropdown;
 });
 
 const createMockAnime = (overrides: Partial<AnimeDetailItem> = {}): AnimeDetailItem => ({

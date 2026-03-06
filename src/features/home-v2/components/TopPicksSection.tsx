@@ -2,8 +2,9 @@
 
 import React from "react";
 import { NewsCard } from "./NewsCard";
+import { V2TopPick } from "@/features/home-v2/types";
 
-export function TopPicksSection({ picks }: { picks: any[] }) {
+export function TopPicksSection({ picks }: { picks: V2TopPick[] }) {
     return (
         <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between mb-2">

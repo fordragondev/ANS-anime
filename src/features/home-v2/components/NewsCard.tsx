@@ -44,11 +44,13 @@ function NewsCardFrame({ children, className = "" }: { children: React.ReactNode
 function NewsCardImage({ className = "" }: { className?: string }) {
     const { data } = use(NewsCardContext)!;
     return (
-        <div className={`shrink-0 overflow-hidden rounded-lg ${className}`}>
-            <img
+        <div className={`shrink-0 overflow-hidden rounded-lg relative ${className}`}>
+            <Image
                 alt={data.title}
                 className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
                 src={data.image}
+                fill
+                sizes="(max-width: 768px) 100vw, 200px"
             />
         </div>
     );
