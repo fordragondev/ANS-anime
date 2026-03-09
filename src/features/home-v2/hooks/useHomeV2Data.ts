@@ -1,28 +1,11 @@
 "use client";
 
 import { useMemo } from "react";
-import { useAnimeData } from "@/hooks/useAnimeData";
+import { useAnimeData } from "@/hooks/useAnimeDataSwr";
 import { useDetailsSwr } from "@/hooks/useDetailsSwr";
 import { AnimeDetailItem } from "@/types/anime";
 import { V2PageData } from "@/features/home-v2/types";
-
-// Helper to assign colors based on anime type/category
-function getColorClasses(type: string) {
-    const typeLower = type ? type.toLowerCase() : "";
-
-    if (typeLower.includes("tv")) {
-        return { colorClass: "text-v2-primary", bgClass: "bg-v2-primary/10" };
-    } else if (typeLower.includes("movie")) {
-        return { colorClass: "text-green-400", bgClass: "bg-green-500/10" };
-    } else if (typeLower.includes("ova")) {
-        return { colorClass: "text-purple-400", bgClass: "bg-purple-500/10" };
-    } else if (typeLower.includes("special")) {
-        return { colorClass: "text-yellow-400", bgClass: "bg-yellow-500/10" };
-    }
-
-    // Default fallback
-    return { colorClass: "text-slate-400", bgClass: "bg-slate-500/10" };
-}
+import { getTypeBadgeStyles } from "@/lib/utils";
 
 export function useHomeV2Data() {
     // 1. Fetch raw anime data (shared)
@@ -46,7 +29,7 @@ export function useHomeV2Data() {
                 image: getImageUrl(sectionData.topStory)
             },
             topPicks: sectionData.topPicks.map((pick) => {
-                const { colorClass } = getColorClasses(pick.type);
+                const { colorClass } = getTypeBadgeStyles(pick.type);
                 return {
                     id: pick.id,
                     type: pick.type || "Anime",
@@ -56,7 +39,7 @@ export function useHomeV2Data() {
                 };
             }),
             latestNews: sectionData.latestNews.map((news) => {
-                const { colorClass, bgClass } = getColorClasses(news.type);
+                const { colorClass, bgClass } = getTypeBadgeStyles(news.type);
                 return {
                     id: news.id,
                     category: news.type || "Update",
@@ -83,6 +66,6 @@ export function useHomeV2Data() {
     return {
         data: mappedData,
         isLoading: isFetchingRaw || (rawAnime.length > 0 && isLoadingDetails && !sectionData),
-        isError: error
+        error
     };
 }

@@ -169,13 +169,13 @@ describe('AnimeCard', () => {
       expect(badge).toHaveClass('bg-gray-600');
     });
 
-    it('handles case-sensitive type matching', () => {
-      // lowercase 'tv' should not match 'TV' and fall back to gray
+    it('handles case-insensitive type matching', () => {
+      // lowercase 'tv' should now match via case-insensitive lookup
       const anime = createMockAnime({ type: 'tv' });
       render(<AnimeCard anime={anime} />);
 
       const badge = screen.getByText('tv');
-      expect(badge).toHaveClass('bg-gray-600');
+      expect(badge).toHaveClass('bg-green-600');
     });
   });
 

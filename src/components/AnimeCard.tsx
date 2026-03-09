@@ -1,24 +1,13 @@
 import Link from 'next/link';
 import Image from 'next/image';
 import { AnimeItem } from '@/types/anime';
-import { formatDate, PLACEHOLDER_IMAGE } from '@/lib/utils';
+import { formatDate, getTypeBadgeColor, PLACEHOLDER_IMAGE } from '@/lib/utils';
 
 interface AnimeCardProps {
   anime: AnimeItem;
 }
 
 export default function AnimeCard({ anime }: AnimeCardProps) {
-  const getTypeColor = (type: string) => {
-    const colors: Record<string, string> = {
-      ONA: 'bg-blue-600',
-      TV: 'bg-green-600',
-      Movie: 'bg-purple-600',
-      OVA: 'bg-orange-600',
-      Special: 'bg-pink-600',
-    };
-    return colors[type] || 'bg-gray-600';
-  };
-
   return (
     <Link href={`/anime/${anime.id}`} className="focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2">
       <article className="bg-white dark:bg-gray-900 rounded-lg shadow-md overflow-hidden hover:shadow-xl transition-all duration-300 cursor-pointer h-full flex flex-col border border-transparent hover:border-primary/20">
@@ -32,7 +21,7 @@ export default function AnimeCard({ anime }: AnimeCardProps) {
             sizes="(max-width: 768px) 100vw, (max-width: 1200px) 50vw, 33vw"
           />
           <span
-            className={`absolute top-2 right-2 ${getTypeColor(anime.type)} text-white text-xs font-semibold px-2 py-1 rounded`}
+            className={`absolute top-2 right-2 ${getTypeBadgeColor(anime.type)} text-white text-xs font-semibold px-2 py-1 rounded`}
           >
             {anime.type}
           </span>

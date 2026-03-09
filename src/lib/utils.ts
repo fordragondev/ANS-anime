@@ -54,13 +54,39 @@ export function isPlaceholderImage(url: string): boolean {
   return url === PLACEHOLDER_IMAGE || url.includes('placehold.co');
 }
 
-export function getTypeColor(type: string): string {
-  const colors: Record<string, string> = {
-    ONA: 'bg-blue-600',
-    TV: 'bg-green-600',
-    Movie: 'bg-purple-600',
-    OVA: 'bg-orange-600',
-    Special: 'bg-pink-600',
-  };
-  return colors[type] || 'bg-gray-600';
+/**
+ * Centralized color definitions for anime types.
+ * Each type maps to both V1 (solid badge) and V2 (text + translucent bg) styles.
+ */
+const TYPE_COLORS: Record<string, { badge: string; colorClass: string; bgClass: string }> = {
+  tv: { badge: 'bg-green-600', colorClass: 'text-v2-primary', bgClass: 'bg-v2-primary/10' },
+  ona: { badge: 'bg-blue-600', colorClass: 'text-blue-400', bgClass: 'bg-blue-500/10' },
+  movie: { badge: 'bg-purple-600', colorClass: 'text-green-400', bgClass: 'bg-green-500/10' },
+  ova: { badge: 'bg-orange-600', colorClass: 'text-purple-400', bgClass: 'bg-purple-500/10' },
+  special: { badge: 'bg-pink-600', colorClass: 'text-yellow-400', bgClass: 'bg-yellow-500/10' },
+};
+
+const DEFAULT_COLORS = { badge: 'bg-gray-600', colorClass: 'text-slate-400', bgClass: 'bg-slate-500/10' };
+
+function resolveTypeColors(type: string) {
+  const key = type?.toLowerCase() ?? '';
+  const match = Object.keys(TYPE_COLORS).find((k) => key.includes(k));
+  return match ? TYPE_COLORS[match] : DEFAULT_COLORS;
+}
+
+/**
+ * V1 badge color — returns a single solid background class (e.g. "bg-green-600").
+ * Used by search, browse, and detail pages for opaque type badges.
+ */
+export function getTypeBadgeColor(type: string): string {
+  return resolveTypeColors(type).badge;
+}
+
+/**
+ * V2 badge styles — returns text color + translucent background classes.
+ * Used by V2 components for the dark-theme badge styling.
+ */
+export function getTypeBadgeStyles(type: string): { colorClass: string; bgClass: string } {
+  const { colorClass, bgClass } = resolveTypeColors(type);
+  return { colorClass, bgClass };
 }

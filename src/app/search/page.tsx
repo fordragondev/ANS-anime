@@ -31,7 +31,7 @@
 import Link from 'next/link';
 import { Search } from 'lucide-react';
 import { fetchAnimeData } from '@/lib/api';
-import { searchAnimeByName, getTypeColor } from '@/lib/utils';
+import { searchAnimeByName, getTypeBadgeColor } from '@/lib/utils';
 import { SubPageHeader } from '@/components/SubPageHeader';
 
 // SSR: Force dynamic rendering - page is rendered fresh on every request
@@ -128,7 +128,7 @@ export default async function SearchPage({ searchParams }: SearchPageProps) {
                         {anime.name}
                       </h2>
                       <span
-                        className={`${getTypeColor(anime.type)} text-white text-xs font-semibold px-2 py-0.5 rounded shrink-0`}
+                        className={`${getTypeBadgeColor(anime.type)} text-white text-xs font-semibold px-2 py-0.5 rounded shrink-0`}
                       >
                         {anime.type}
                       </span>

@@ -11,6 +11,7 @@
  */
 "use client";
 
+import { Suspense } from "react";
 import dynamic from "next/dynamic";
 import { useDesign } from "@/components/DesignProvider";
 
@@ -19,7 +20,19 @@ import { useDesign } from "@/components/DesignProvider";
 const HomeV1 = dynamic(() => import("@/features/home-v1/HomeV1").then((mod) => mod.HomeV1));
 const HomeV2 = dynamic(() => import("@/features/home-v2/HomeV2").then((mod) => mod.HomeV2));
 
+function LoadingFallback() {
+  return (
+    <div className="min-h-screen flex items-center justify-center">
+      <div className="animate-pulse text-lg text-gray-400">Loading...</div>
+    </div>
+  );
+}
+
 export default function Home() {
   const { activeDesign } = useDesign();
-  return activeDesign === "v1" ? <HomeV1 /> : <HomeV2 />;
+  return (
+    <Suspense fallback={<LoadingFallback />}>
+      {activeDesign === "v1" ? <HomeV1 /> : <HomeV2 />}
+    </Suspense>
+  );
 }

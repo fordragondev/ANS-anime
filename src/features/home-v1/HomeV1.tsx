@@ -45,7 +45,7 @@ import { SearchModalSwr } from '@/features/home-v1/components/SearchModalSwr';
 import ErrorBoundary from '@/components/ErrorBoundary';
 import { useHomeV1Data } from '@/features/home-v1/hooks/useHomeV1Data';
 import { useSearch } from '@/features/home-v1/hooks/useSearch';
-import { useAnimeData } from '@/hooks/useAnimeData';
+import { useAnimeData } from '@/hooks/useAnimeDataSwr';
 
 export function HomeV1() {
     const {

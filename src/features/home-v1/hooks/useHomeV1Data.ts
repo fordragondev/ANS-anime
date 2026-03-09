@@ -1,7 +1,7 @@
 'use client';
 
 import { useState, useMemo } from 'react';
-import { useAnimeData } from '@/hooks/useAnimeData';
+import { useAnimeData } from '@/hooks/useAnimeDataSwr';
 import { useDetailsSwr } from '@/hooks/useDetailsSwr';
 import { filterAnimeByType, getUniqueTypes } from '@/lib/utils';
 import { SECTION_ALLOCATION } from '@/lib/constants';

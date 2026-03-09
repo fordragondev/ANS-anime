@@ -32,7 +32,7 @@ import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import Image from 'next/image';
 import { fetchAnimeData } from '@/lib/api';
-import { formatDate, getTypeColor, PLACEHOLDER_IMAGE } from '@/lib/utils';
+import { formatDate, getTypeBadgeColor, PLACEHOLDER_IMAGE } from '@/lib/utils';
 import { SubPageHeader } from '@/components/SubPageHeader';
 
 interface AnimeDetailPageProps {
@@ -121,7 +121,7 @@ export default async function AnimeDetailPage({ params }: AnimeDetailPageProps) 
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 to-transparent" />
               <div className="absolute bottom-4 left-4 sm:bottom-6 sm:left-6">
                 <span
-                  className={`${getTypeColor(anime.type)} text-white text-sm font-semibold px-3 py-1 rounded`}
+                  className={`${getTypeBadgeColor(anime.type)} text-white text-sm font-semibold px-3 py-1 rounded`}
                 >
                   {anime.type}
                 </span>

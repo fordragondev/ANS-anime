@@ -20,7 +20,7 @@ import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { Filter } from 'lucide-react';
 import { AnimeItem, AnimeType } from '@/types/anime';
-import { filterAnimeByType, getUniqueTypes, getTypeColor } from '@/lib/utils';
+import { filterAnimeByType, getUniqueTypes, getTypeBadgeColor } from '@/lib/utils';
 import { ANIME_TYPES } from '@/lib/constants';
 import { SubPageHeader } from '@/components/SubPageHeader';
 
@@ -97,11 +97,10 @@ export default function BrowseClient({ initialData }: BrowseClientProps) {
                 <button
                   key={type}
                   onClick={() => handleTypeChange(type)}
-                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${
-                    selectedType === type
-                      ? 'bg-primary text-white'
-                      : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
-                  }`}
+                  className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${selectedType === type
+                    ? 'bg-primary text-white'
+                    : 'bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700'
+                    }`}
                 >
                   {type}
                   <span className="ml-1.5 text-xs opacity-75">
@@ -138,7 +137,7 @@ export default function BrowseClient({ initialData }: BrowseClientProps) {
                   {anime.name}
                 </h2>
                 <span
-                  className={`${getTypeColor(anime.type)} text-white text-xs font-semibold px-2 py-0.5 rounded shrink-0`}
+                  className={`${getTypeBadgeColor(anime.type)} text-white text-xs font-semibold px-2 py-0.5 rounded shrink-0`}
                 >
                   {anime.type}
                 </span>
