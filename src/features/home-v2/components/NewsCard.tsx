@@ -12,8 +12,8 @@ type NewsCardContextValue = {
         category?: string;
         categoryColorClass?: string;
         categoryBgClass?: string;
-        ago?: string;
-        comments?: number;
+        vintage?: string;
+        votes?: number;
     };
 };
 
@@ -97,18 +97,18 @@ function NewsCardExcerpt({ className = "" }: { className?: string }) {
 
 function NewsCardMeta() {
     const { data } = use(NewsCardContext)!;
-    if (!data.ago && !data.comments) return null;
+    if (!data.vintage && !data.votes) return null;
 
     return (
         <div className="flex items-center gap-4 text-sm text-slate-400">
-            {data.ago && (
+            {data.vintage && (
                 <span className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[16px]">schedule</span> {data.ago}
+                    <span className="material-symbols-outlined text-[16px]">calendar_month</span> {data.vintage}
                 </span>
             )}
-            {data.comments !== undefined && (
+            {data.votes !== undefined && (
                 <span className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[16px]">chat_bubble</span> {data.comments} comments
+                    <span className="material-symbols-outlined text-[16px]">thumbs_up_down</span> {data.votes} votes
                 </span>
             )}
         </div>

@@ -2,9 +2,10 @@
 
 import React from "react";
 import { NewsCard } from "./NewsCard";
-import { V2TopPick } from "@/features/home-v2/types";
+import { AnimeDetailItem } from "@/types/anime";
+import { getTypeBadgeStyles } from "@/lib/utils";
 
-export function TopPicksSection({ picks }: { picks: V2TopPick[] }) {
+export function TopPicksSection({ picks }: { picks: AnimeDetailItem[] }) {
     return (
         <div className="flex flex-col gap-4">
             <div className="flex items-center justify-between mb-2">
@@ -14,23 +15,26 @@ export function TopPicksSection({ picks }: { picks: V2TopPick[] }) {
                 </h3>
             </div>
             <div className="space-y-4">
-                {picks?.map((pick) => (
-                    <NewsCard.Provider key={pick.id} data={{
-                        title: pick.title,
-                        image: pick.image,
-                        category: pick.type,
-                        categoryColorClass: pick.typeColor
-                    }}>
-                        <NewsCard.Frame className="flex gap-4 p-3 cursor-pointer">
-                            <NewsCard.Image className="h-20 w-24" />
-                            <NewsCard.Content className="pr-8">
-                                <NewsCard.Badge />
-                                <NewsCard.Title className="text-sm leading-tight line-clamp-2 mt-1" />
-                            </NewsCard.Content>
-                            <NewsCard.Bookmark className="top-3 right-3 text-[20px]" />
-                        </NewsCard.Frame>
-                    </NewsCard.Provider>
-                ))}
+                {picks?.map((pick) => {
+                    const { colorClass } = getTypeBadgeStyles(pick.type);
+                    return (
+                        <NewsCard.Provider key={pick.id} data={{
+                            title: pick.name,
+                            image: pick.imageUrl,
+                            category: pick.type,
+                            categoryColorClass: colorClass
+                        }}>
+                            <NewsCard.Frame className="flex gap-4 p-3 cursor-pointer">
+                                <NewsCard.Image className="h-20 w-24" />
+                                <NewsCard.Content className="pr-8">
+                                    <NewsCard.Badge />
+                                    <NewsCard.Title className="text-sm leading-tight line-clamp-2 mt-1" />
+                                </NewsCard.Content>
+                                <NewsCard.Bookmark className="top-3 right-3 text-[20px]" />
+                            </NewsCard.Frame>
+                        </NewsCard.Provider>
+                    );
+                })}
             </div>
         </div>
     );

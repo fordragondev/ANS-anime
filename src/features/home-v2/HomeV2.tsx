@@ -12,7 +12,7 @@ import { LatestNewsSection } from "@/features/home-v2/components/LatestNewsSecti
 import { CategoryHubSection } from "@/features/home-v2/components/CategoryHubSection";
 
 export function HomeV2() {
-    const { data: pageData, isLoading, error } = useHomeV2Data();
+    const { sectionData, isLoading, error } = useHomeV2Data();
 
     if (error) {
         return (
@@ -27,6 +27,11 @@ export function HomeV2() {
         );
     }
 
+    // Map categories object to array for CategoryHubSection
+    const categoryEntries = sectionData
+        ? Object.entries(sectionData.categories).map(([key, data]) => ({ key, data }))
+        : [];
+
     return (
         <ErrorBoundary>
             <div className="min-h-screen flex flex-col overflow-x-hidden font-display text-slate-100 bg-v2-background-dark">
@@ -39,19 +44,19 @@ export function HomeV2() {
                                 <div className="flex justify-center items-center h-64">
                                     <span className="text-v2-primary">Loading content...</span>
                                 </div>
-                            ) : pageData ? (
+                            ) : sectionData ? (
                                 <>
                                     <section className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                                        <HeroSection featured={pageData.featured} />
+                                        <HeroSection featured={sectionData.topStory} />
 
                                         <div className="lg:col-span-1 flex flex-col gap-6">
-                                            <TopPicksSection picks={pageData.topPicks} />
+                                            <TopPicksSection picks={sectionData.topPicks} />
                                             <FollowUsSection />
                                         </div>
                                     </section>
 
-                                    <LatestNewsSection news={pageData.latestNews} />
-                                    <CategoryHubSection categories={pageData.categories} />
+                                    <LatestNewsSection news={sectionData.latestNews} />
+                                    <CategoryHubSection categories={categoryEntries} />
                                 </>
                             ) : (
                                 <div className="text-red-500">Failed to load V2 data.</div>

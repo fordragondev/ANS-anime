@@ -2,9 +2,11 @@
 
 import React from "react";
 import { CategoryCard } from "./CategoryCard";
-import { V2Category } from "@/features/home-v2/types";
+import { SectionData } from "@/types/anime";
 
-export function CategoryHubSection({ categories }: { categories: V2Category[] }) {
+type CategoryEntry = { key: string; data: SectionData["categories"][string] };
+
+export function CategoryHubSection({ categories }: { categories: CategoryEntry[] }) {
     return (
         <section className="space-y-8">
             <div className="flex items-center justify-between">
@@ -15,7 +17,12 @@ export function CategoryHubSection({ categories }: { categories: V2Category[] })
             </div>
             <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                 {categories?.map((category) => (
-                    <CategoryCard.Provider key={category.id} data={category}>
+                    <CategoryCard.Provider key={category.key} data={{
+                        title: category.key,
+                        heroImage: category.data.featured.imageUrl,
+                        mainStory: category.data.featured.name,
+                        substories: category.data.links.map(link => link.name)
+                    }}>
                         <CategoryCard.Frame>
                             <CategoryCard.Hero />
                             <CategoryCard.List />

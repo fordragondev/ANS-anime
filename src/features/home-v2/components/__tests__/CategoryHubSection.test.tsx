@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
 import { CategoryHubSection } from '@/features/home-v2/components/CategoryHubSection';
-import { V2Category } from '@/features/home-v2/types';
+import { AnimeDetailItem, SectionData } from '@/types/anime';
 
 // Mock next/image
 jest.mock('next/image', () => {
@@ -13,13 +13,31 @@ jest.mock('next/image', () => {
     return MockImage;
 });
 
-const createMockCategory = (overrides: Partial<V2Category> = {}): V2Category => ({
-    id: 1,
-    title: 'TV Series',
-    heroImage: 'https://example.com/tv.jpg',
-    mainStory: 'New TV anime announced for Spring 2024',
-    substories: ['Story A', 'Story B', 'Story C'],
+const createMockDetailItem = (overrides: Partial<AnimeDetailItem> = {}): AnimeDetailItem => ({
+    id: '1',
+    type: 'TV',
+    name: 'Test Anime',
+    vintage: '2024',
+    description: 'Test description',
+    imageUrl: 'https://example.com/tv.jpg',
+    director: 'Test Director',
+    rating: 8.0,
+    voteCount: 100,
+    genres: ['Action'],
+    themes: ['Adventure'],
     ...overrides,
+});
+
+type CategoryEntry = { key: string; data: SectionData["categories"][string] };
+
+const createMockCategory = (overrides: Partial<{ key: string; mainStory: string; substories: string[] }> = {}): CategoryEntry => ({
+    key: overrides.key ?? 'TV Series',
+    data: {
+        featured: createMockDetailItem({ name: overrides.mainStory ?? 'New TV anime announced for Spring 2024' }),
+        links: (overrides.substories ?? ['Story A', 'Story B', 'Story C']).map((name, i) =>
+            createMockDetailItem({ id: String(i + 10), name })
+        ),
+    },
 });
 
 describe('CategoryHubSection', () => {
@@ -30,13 +48,12 @@ describe('CategoryHubSection', () => {
 
     it('renders a card for each category', () => {
         const categories = [
-            createMockCategory({ id: 1, title: 'TV Series' }),
-            createMockCategory({ id: 2, title: 'Movies' }),
-            createMockCategory({ id: 3, title: 'OVA' }),
+            createMockCategory({ key: 'TV Series' }),
+            createMockCategory({ key: 'Movies' }),
+            createMockCategory({ key: 'OVA' }),
         ];
         render(<CategoryHubSection categories={categories} />);
 
-        // Each category renders an article-like card with its title
         expect(screen.getByText('TV Series')).toBeInTheDocument();
         expect(screen.getByText('Movies')).toBeInTheDocument();
         expect(screen.getByText('OVA')).toBeInTheDocument();
@@ -61,9 +78,7 @@ describe('CategoryHubSection', () => {
 
     it('renders empty grid when categories array is empty', () => {
         const { container } = render(<CategoryHubSection categories={[]} />);
-        // Section heading should still render
         expect(screen.getByText('Category Hub')).toBeInTheDocument();
-        // But no category items
         expect(container.querySelectorAll('img')).toHaveLength(0);
     });
 });

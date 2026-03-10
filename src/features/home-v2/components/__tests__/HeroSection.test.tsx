@@ -1,7 +1,7 @@
 import { render, screen } from '@testing-library/react';
 import '@testing-library/jest-dom';
-import { HeroSection } from '@/features/home-v2/components/HeroSection';
-import { V2Featured } from '@/features/home-v2/types';
+import { HeroSection } from '../HeroSection';
+import { AnimeDetailItem } from '@/types/anime';
 
 // Mock next/image
 jest.mock('next/image', () => {
@@ -13,12 +13,18 @@ jest.mock('next/image', () => {
     return MockImage;
 });
 
-const createMockFeatured = (overrides: Partial<V2Featured> = {}): V2Featured => ({
-    title: 'Attack on Titan Final Season',
-    excerpt: 'The epic conclusion to the beloved anime series arrives this spring.',
-    ago: 'Since 2023-04-01',
-    comments: 42,
-    image: 'https://example.com/aot-hero.jpg',
+const createMockFeatured = (overrides: Partial<AnimeDetailItem> = {}): AnimeDetailItem => ({
+    id: '1',
+    type: 'TV',
+    name: 'Attack on Titan Final Season',
+    vintage: '2023-04-01',
+    description: 'The epic conclusion to the beloved anime series arrives this spring.',
+    imageUrl: 'https://example.com/aot-hero.jpg',
+    director: 'Test Director',
+    rating: 8.5,
+    voteCount: 42,
+    genres: ['Action'],
+    themes: ['Military'],
     ...overrides,
 });
 
@@ -34,14 +40,14 @@ describe('HeroSection', () => {
             expect(screen.getByText(/epic conclusion to the beloved anime/)).toBeInTheDocument();
         });
 
-        it('renders the time ago text', () => {
-            render(<HeroSection featured={createMockFeatured({ ago: '2 hours ago' })} />);
-            expect(screen.getByText('2 hours ago')).toBeInTheDocument();
+        it('renders the vintage date', () => {
+            render(<HeroSection featured={createMockFeatured({ vintage: '2024 Spring' })} />);
+            expect(screen.getByText('2024 Spring')).toBeInTheDocument();
         });
 
-        it('renders the comments count', () => {
-            render(<HeroSection featured={createMockFeatured({ comments: 99 })} />);
-            expect(screen.getByText('99 comments')).toBeInTheDocument();
+        it('renders the votes count', () => {
+            render(<HeroSection featured={createMockFeatured({ voteCount: 99 })} />);
+            expect(screen.getByText('99 votes')).toBeInTheDocument();
         });
 
         it('renders the hero image with correct src', () => {
@@ -63,14 +69,14 @@ describe('HeroSection', () => {
             expect(container.innerHTML).toBe('');
         });
 
-        it('handles empty excerpt', () => {
-            render(<HeroSection featured={createMockFeatured({ excerpt: '' })} />);
+        it('handles empty description', () => {
+            render(<HeroSection featured={createMockFeatured({ description: '' })} />);
             expect(screen.getByRole('heading', { level: 1 })).toHaveTextContent('Attack on Titan Final Season');
         });
 
-        it('handles zero comments', () => {
-            render(<HeroSection featured={createMockFeatured({ comments: 0 })} />);
-            expect(screen.getByText('0 comments')).toBeInTheDocument();
+        it('handles zero votes', () => {
+            render(<HeroSection featured={createMockFeatured({ voteCount: 0 })} />);
+            expect(screen.getByText('0 votes')).toBeInTheDocument();
         });
     });
 });
