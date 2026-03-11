@@ -1,168 +1,243 @@
-# Anime News
+# CLAUDE.md — Anime News Codebase Onboarding
 
-A modern Next.js application that displays anime information from the Anime News Network API.
+> This file gives Claude (or any AI agent) the context it needs to navigate, understand, and contribute to this project effectively.
 
-## Tech Stack
+## Project Purpose
 
-- **Framework**: Next.js 16.1.1 with App Router
-- **React**: 19.2.3 with React Compiler enabled
-- **TypeScript**: Strict mode enabled
-- **Styling**: Tailwind CSS 4
-- **API**: Anime News Network Encyclopedia API
-- **XML Parsing**: xml2js
-- **Icons**: lucide-react
+**Anime News** is a modern web app that displays anime data sourced from the [Anime News Network Encyclopedia API](https://www.animenewsnetwork.com/encyclopedia/api.php). It serves as both a functional anime news portal and a reference implementation showcasing **all four Next.js rendering strategies** (CSR, SSG, SSR, Hybrid) and **React 19 features** (React Compiler, `use()` API).
 
-## Project Structure
-- `src/app/` - App Router pages and layouts
-- `src/components/` - Reusable React components
-- `src/lib/` - Utility functions and shared code
-- `src/hooks/` - Custom React hooks
-- `public/` - Static assets
-
-## Conventions
-- Use Server Components by default, add 'use client' only when needed
-- Prefer named exports for components
-- Follow the Next.js file-based routing conventions
-- Use next/image for optimized images
-- Use next/link for client-side navigation
-
-## Code Style
-- Use functional components with TypeScript
-- Prefer async/await over .then() chains
-- Use early returns for cleaner code
-- Keep components small and focused
-
-## Configuration
-- Local SVG placeholder for missing images (no external dependencies)
-- Tailwind CSS: No config file needed (CSS-based configuration in v4)
-- Dark Mode: ThemeProvider manages `dark` class on `<html>` (system preference in prod, manual toggle in dev)
-
-## Features
-
-### Core Functionality
-- Fetches anime data from Anime News Network API
-- Displays featured anime in hero section
-- Grid layout of anime cards with type, name, and vintage
-- Individual anime detail pages with dynamic routing
-- Client-side data caching (1 hour revalidation)
-
-### Pages
-- **Home** (`/`): Interactive dashboard with sections, filters, search modal
-- **Anime Detail** (`/anime/[id]`): Pre-rendered anime information pages
-- **Search** (`/search?q=...`): Server-rendered search results with shareable URLs
-- **Browse** (`/browse`): Full anime catalog with type filtering and pagination
-
-### User Interface
-- Responsive design (mobile, tablet, desktop)
-- Navigation header with Browse link and search
-- Search modal (home) and dedicated search page (shareable URLs)
-- Filter by anime type (All, TV, Movie, ONA, OVA, Special)
-- "Load More" pagination for better performance
-- Loading states with skeleton cards
-- Error handling with retry functionality
-- Dark mode support (system preference + dev-only manual toggle)
-
-### Performance
-- Multiple rendering strategies (see Rendering Strategies section)
-- Optimized re-renders with useMemo hooks
-- 1-hour cache revalidation on API requests
-
-## Setup Instructions
-
-### Prerequisites
-- Node.js 20+ installed
-- npm or yarn package manager
-
-### Installation
-
-1. Clone the repository
-```bash
-git clone <repository-url>
-cd anime-news
-```
-
-2. Install dependencies
-```bash
-npm install
-```
-
-3. Run development server
-```bash
-npm run dev
-```
-
-4. Open browser at http://localhost:3000
-
-### Available Scripts
-
-- `npm run dev` - Start development server
-- `npm run build` - Build production bundle
-- `npm start` - Start production server
-- `npm run lint` - Run ESLint
-
-## API Information
-
-**Endpoint**: https://www.animenewsnetwork.com/encyclopedia/reports.xml
-
-**Parameters**:
-- `id=155` - Report ID for anime list
-- `type=anime` - Content type
-- `nlist=50` - Number of items to fetch
-
-**Response Format**: XML (parsed to JSON)
-
-**Data Structure**:
-```typescript
-interface AnimeItem {
-  id: string;
-  type: string;      // TV, Movie, ONA, OVA, Special
-  name: string;
-  vintage: string;   // Release year/season
-}
-```
-
-## Rendering Strategies
-
-This project demonstrates all 4 Next.js rendering strategies. See `RenderingSg.md` for detailed examples.
-
-| Strategy | Page | Description |
-|----------|------|-------------|
-| **CSR** | `/` | Client-Side Rendering - Interactive dashboard with filters and search |
-| **SSG** | `/anime/[id]` | Static Site Generation - Pre-rendered detail pages with ISR |
-| **SSR** | `/search` | Server-Side Rendering - Fresh search results on every request |
-| **Hybrid** | `/browse` | Server + Client Components - Server fetches data, client handles interactivity |
-
-### When to Use Each
-- **CSR**: Heavy interactivity, real-time updates, user-specific state
-- **SSG**: Static content, SEO critical, maximum performance
-- **SSR**: Dynamic URLs, always-fresh data, SEO + personalization
-- **Hybrid**: Best of both - fast initial load + client interactivity
-
-## Styling Architecture
-
-### Approach
-- **Tailwind-first**: Use Tailwind utility classes for all component styling
-- **Component-level**: Avoid global CSS classes, rely on component-specific Tailwind classes
-- **CSS Variables**: Only for branding colors (primary, accent, background, foreground)
-- **Minimal globals.css**: ~80 lines (branding colors, scrollbar, selection styles)
-
-### Color System
-- **Primary**: #003DA5 (Blue) - `bg-primary`
-- **Accent**: #DC2626 (Red) - `bg-accent`
-- **Tailwind Colors**: `bg-white dark:bg-gray-900`, `text-gray-600 dark:text-gray-400`
-- **No custom semantic colors**: Removed card-bg, hover-bg, text-muted in favor of Tailwind
-
-## Browser Support
-
-- Chrome/Edge (latest)
-- Firefox (latest)
-- Safari (latest)
-- Mobile browsers (iOS Safari, Chrome Mobile)
-
-## License
-
-Private project
+The app features **two swappable homepage designs** (V1 and V2) that users can toggle at runtime via a floating action button, each with its own components, hooks, and styling — but sharing the same API and data layer.
 
 ---
 
-Generated with Claude Code
+## Tech Stack
+
+| Technology | Version | Purpose |
+|---|---|---|
+| **Next.js** | 16.1.1 | React framework with App Router |
+| **React** | 19.2.3 | UI library, React Compiler enabled (`reactCompiler: true` in `next.config.ts`) |
+| **TypeScript** | 5 | Strict mode (`"strict": true` in `tsconfig.json`) |
+| **Tailwind CSS** | 4 | Styling — CSS-based config (no `tailwind.config.js`), uses `@theme inline` in `globals.css` |
+| **SWR** | 2.x | Data fetching with caching, request deduplication, and retry |
+| **Jest** | 30 | Test runner with `jest-environment-jsdom` |
+| **React Testing Library** | 16.x | Component testing |
+| **xml2js** | 0.6.2 | XML → JSON parsing for ANN API responses |
+| **lucide-react** | 0.562 | Icons (V1 design) |
+| **Material Symbols** | CDN | Icons (V2 design, loaded via Google Fonts CSS import) |
+
+**Package manager:** npm (not yarn, pnpm, or bun)
+**Path alias:** `@/*` → `./src/*` (configured in `tsconfig.json`)
+**Fonts:** Geist, Geist Mono, Space Grotesk (via `next/font/google`)
+
+---
+
+## Project Structure
+
+```
+anime-news/
+├── src/
+│   ├── app/                        # Next.js App Router
+│   │   ├── layout.tsx              # Root layout — wraps everything in ThemeProvider → DesignProvider → HeaderToggle
+│   │   ├── page.tsx                # Home entry — "design router" that lazy-loads V1 or V2 via next/dynamic
+│   │   ├── globals.css             # Design tokens (CSS vars + @theme inline), dark mode, scrollbar, selection styles
+│   │   ├── anime/[id]/page.tsx     # Anime detail page (SSG — pre-rendered at build time)
+│   │   ├── browse/page.tsx         # Browse catalog (Hybrid — server data + client interactivity)
+│   │   ├── search/page.tsx         # Search results (SSR — fresh on every request)
+│   │   └── api/anime/route.ts      # API route — proxies ANN XML API, returns JSON
+│   │
+│   ├── features/                   # Feature-based modules (V1 and V2 are independent)
+│   │   ├── home-v1/                # ── Design V1 (Light / News Portal) ──
+│   │   │   ├── HomeV1.tsx          # V1 page component
+│   │   │   ├── components/         # V1-only: Header, TopStory, TopPicks, LatestNews, CategorySection, LoadingSkeletons, SearchModalSwr
+│   │   │   │   └── __tests__/      # 5 test suites for V1 components
+│   │   │   └── hooks/
+│   │   │       ├── useHomeV1Data.ts  # V1 data mapper — filtering, load-more, type selection
+│   │   │       └── useSearch.ts      # Search logic
+│   │   │
+│   │   └── home-v2/                # ── Design V2 (Dark / Modern Glassmorphism) ──
+│   │       ├── HomeV2.tsx          # V2 page component (wrapped in ErrorBoundary)
+│   │       ├── components/         # V2-only: HeaderV2, FooterV2, HeroSection, NewsCard (compound), CategoryCard (compound)
+│   │       │   └── __tests__/      # 3 test suites for V2 components
+│   │       └── hooks/
+│   │           └── useHomeV2Data.ts  # V2 data mapper — shapes data + assigns colors
+│   │
+│   ├── components/                 # Shared components (used by both designs and sub-pages)
+│   │   ├── DesignProvider.tsx      # React Context for design toggle (v1/v2), persists to localStorage
+│   │   ├── ThemeProvider.tsx       # Dark/light theme context (system pref in prod, manual toggle in dev)
+│   │   ├── HeaderToggle.tsx        # Floating action button to swap V1 ↔ V2
+│   │   ├── ErrorBoundary.tsx       # Class component error boundary with retry
+│   │   ├── AnimeCard.tsx           # Reusable anime card (shared across pages)
+│   │   ├── FilterDropdown.tsx      # Type filter dropdown
+│   │   ├── SectionHeader.tsx       # Section title component
+│   │   ├── SubPageHeader.tsx       # Header for non-home pages (browse, search, detail)
+│   │   ├── SearchModal.tsx         # Original search modal
+│   │   └── __tests__/             # 1 shared component test suite (AnimeCard)
+│   │
+│   ├── hooks/                      # Shared hooks
+│   │   ├── useAnimeDataSwr.ts     # SWR-based anime list fetcher (dedup + retry) — core data hook
+│   │   ├── useDetailsSwr.ts       # SWR-based detail enrichment (batch-fetches extra fields)
+│   │   ├── useSectionData.ts      # ⚠️ DEAD CODE — legacy, pre-SWR
+│   │   └── useSectionDataSwr.ts   # ⚠️ DEAD CODE — legacy, superseded by per-design data mappers
+│   │
+│   ├── lib/                        # Utilities
+│   │   ├── api.ts                 # fetchAnimeData() — fetches ANN XML, parses to JSON, returns AnimeItem[]
+│   │   ├── animeDetails.ts        # fetchAnimeDetails() — fetches detailed info for individual anime
+│   │   ├── utils.ts               # getTypeBadgeColor() (V1), getTypeBadgeStyles() (V2), TYPE_COLORS map
+│   │   └── constants.ts           # API_CONFIG, DETAIL_API_CONFIG, PAGINATION, SECTION_ALLOCATION, ANIME_TYPES
+│   │
+│   └── types/
+│       └── anime.ts               # Shared types: AnimeItem, AnimeDetailItem, SectionData, AnimeType
+│
+├── public/                         # Static assets (favicon, SVG placeholder)
+├── next.config.ts                 # React Compiler enabled, remote image patterns
+├── tsconfig.json                  # Strict mode, @/* path alias
+├── jest.config.js                 # next/jest setup, jsdom env, @/* alias
+├── jest.setup.js                  # Imports @testing-library/jest-dom
+├── eslint.config.mjs              # Flat config: next/core-web-vitals + next/typescript
+├── postcss.config.mjs             # @tailwindcss/postcss
+└── package.json                   # Scripts, dependencies
+```
+
+### Dead Code (TODO — safe to delete)
+
+- `src/hooks/useSectionData.ts` — pre-SWR legacy hook
+- `src/hooks/useSectionDataSwr.ts` — superseded by `useHomeV1Data` and `useHomeV2Data`
+- `src/app/HomeV2 plainHtml.tsx` — old prototype
+- `src/components/sections/` — empty directory
+- `src/components/v2/` — empty directory
+
+---
+
+## Architecture & Data Flow
+
+### Data Pipeline
+
+```
+ANN XML API (reports.xml / api.xml)
+      ↓
+/api/anime route (XML → JSON proxy)
+      ↓
+useAnimeDataSwr (SWR: fetch + cache + dedup)
+      ↓
+useDetailsSwr (batch enrichment: images, ratings, genres)
+      ↓
+┌─────────────────────────┬────────────────────────────┐
+│   useHomeV1Data          │   useHomeV2Data             │
+│   (V1 data mapper)       │   (V2 data mapper)          │
+│   Outputs: SectionData   │   Outputs: SectionData      │
+└─────────────┬───────────┘────────────┬─────────────────┘
+              ↓                        ↓
+         HomeV1 components        HomeV2 components
+```
+
+### Design Toggle System
+
+1. **`DesignProvider`** — React Context using React 19 `use()` API, stores `"v1"` or `"v2"` in `localStorage`
+2. **`page.tsx`** (home) — Reads `activeDesign` from context, lazy-loads the active design's bundle with `next/dynamic` + `<Suspense>`
+3. **`HeaderToggle`** — FAB button (bottom-right) that calls `toggleDesign()`
+4. **Code-splitting guarantee** — Client only downloads JS for the active design
+
+### Rendering Strategy per Route
+
+| Route | Strategy | Key Detail |
+|---|---|---|
+| `/` | CSR | Client-side design toggle, SWR data fetching |
+| `/anime/[id]` | SSG | `generateStaticParams` pre-renders ~100 pages at build time |
+| `/search` | SSR | Server-rendered on each request, shareable URL-based queries |
+| `/browse` | Hybrid | Server component fetches data, client component handles filters/pagination |
+| `/api/anime` | API Route | Proxies ANN XML → JSON |
+
+### Key Patterns
+
+- **Feature-based organization**: V1 and V2 are fully independent in `src/features/`, each with own components, hooks, and tests
+- **Compound components** (V2): `NewsCard` and `CategoryCard` use Provider/Frame/Content sub-component patterns
+- **Centralized design tokens**: CSS custom properties in `globals.css` `:root`, mapped to Tailwind via `@theme inline`
+- **Unified color system**: `TYPE_COLORS` map in `utils.ts` drives both `getTypeBadgeColor()` (V1 solid) and `getTypeBadgeStyles()` (V2 translucent)
+- **Error boundaries**: Both V1 and V2 are wrapped in `<ErrorBoundary>` for graceful degradation
+
+---
+
+## How to Work on This Project
+
+### Commands
+
+```bash
+# Install dependencies
+npm install
+
+# Start dev server (http://localhost:3000)
+npm run dev
+
+# Run all tests (193 tests across 9 suites)
+npm test
+
+# Run tests in watch mode
+npm run test:watch
+
+# Run tests with coverage
+npm run test:coverage
+
+# Lint (ESLint with Next.js core-web-vitals + TypeScript rules)
+npm run lint
+
+# Production build (also validates types)
+npm run build
+
+# Start production server (after build)
+npm start
+```
+
+### Verifying Changes
+
+After making changes, run these to validate:
+
+1. **Type check** — `npm run build` (Next.js build includes TypeScript compilation, or run the tsc portion)
+2. **Tests** — `npm test` (all 193 tests should pass)
+3. **Lint** — `npm run lint`
+4. **Dev server** — `npm run dev` and check http://localhost:3000 visually
+
+### Conventions to Follow
+
+- **TypeScript strict mode** — No `any` types, no type errors
+- **Named exports** for components (e.g., `export function HomeV1()`, not `export default`)
+- **Server Components by default** — Only add `"use client"` when the component needs interactivity, hooks, or browser APIs
+- **`next/image`** for all images, **`next/link`** for navigation
+- **Functional components** only — No class components (except `ErrorBoundary`)
+- **async/await** over `.then()` chains
+- **Early returns** for guard clauses
+- **Tailwind-first styling** — Use utility classes, avoid writing custom CSS classes
+- **CSS variables** only for branding colors and design tokens (defined in `globals.css`)
+
+### When Modifying V1 or V2
+
+- V1 components live in `src/features/home-v1/components/` — **do not import V2 code and vice versa**
+- Shared logic (hooks, types, utils) goes in `src/hooks/`, `src/types/`, or `src/lib/`
+- Each design has its own data mapper hook (`useHomeV1Data`, `useHomeV2Data`) that outputs the shared `SectionData` type
+- Tests for design-specific components live in `src/features/home-v{1,2}/components/__tests__/`
+
+### API Details
+
+- **List endpoint**: `https://www.animenewsnetwork.com/encyclopedia/reports.xml?id=155&type=anime&nlist=100&nskip=100`
+- **Detail endpoint**: `https://cdn.animenewsnetwork.com/encyclopedia/api.xml?anime=<id>`
+- Responses are **XML**, parsed to JSON with `xml2js` (`parseStringPromise`)
+- API proxy route: `src/app/api/anime/route.ts`
+- Cache: 1-hour revalidation (`next: { revalidate: 3600 }`)
+
+### Configuration Files
+
+| File | Purpose |
+|---|---|
+| `next.config.ts` | React Compiler enabled, allowed remote image domains |
+| `tsconfig.json` | Strict mode, `@/*` path alias, bundler module resolution |
+| `jest.config.js` | next/jest, jsdom env, `@/*` alias mapping |
+| `eslint.config.mjs` | Flat ESLint config: core-web-vitals + typescript |
+| `postcss.config.mjs` | @tailwindcss/postcss plugin |
+| `globals.css` | Design tokens, dark mode, Tailwind `@theme inline` |
+
+### Known Issues & TODOs
+
+- Dead code to clean up: `useSectionData.ts`, `useSectionDataSwr.ts`, `HomeV2 plainHtml.tsx`, empty `components/v2/` and `components/sections/`
+- Some remaining ESLint errors to fix
+- HomeV2 search, icons, and spacing need polish
+- Dark mode toggle on HomeV2 needs verification
+- `ThemeProvider` localStorage persistence is dev-only (not yet enabled for production)

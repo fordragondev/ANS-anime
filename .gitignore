@@ -43,6 +43,7 @@ next-env.d.ts
 # local notes
 React-Next-Details.md
 RenderingSg.md
+PLAN.md
 
 # folders
 .playwright-mcp/
