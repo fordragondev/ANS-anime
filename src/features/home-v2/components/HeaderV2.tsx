@@ -1,4 +1,5 @@
 import { Clapperboard, Search, Bookmark } from 'lucide-react';
+import Image from 'next/image';
 
 export function HeaderV2() {
     return (
@@ -25,7 +26,7 @@ export function HeaderV2() {
                         <Bookmark size={20} />
                     </button>
                     <button className="relative flex h-10 w-10 items-center justify-center overflow-hidden rounded-full border-2 border-v2-border-dark hover:border-v2-primary transition-colors">
-                        <img alt="User Avatar" className="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvY1I3vg-6kVP9NisfozAA8ARbaQ3oO_vgo4TJrIY2x4MK28MTg9rIiNjWS3fhjg4fbH29G8ul-Dg8jNc895stLEHaneIi0mS1akpHRvJzoGhfsl0z47jDcbritfuFbE10_8v5iu3j1sk7i6O08T49W0KZXbipYgjMJn74gzOKAW4eRCQ7ghabASRZTGOC1hAn9bdOit_FTmlxIap4_2by2z9hcmsR-nyd0YGG_weT8Kik4zV0AYF6czsjfECyOfZk0FKa7VoF3cOc" />
+                        <Image alt="User Avatar" className="h-full w-full object-cover" src="https://lh3.googleusercontent.com/aida-public/AB6AXuCvY1I3vg-6kVP9NisfozAA8ARbaQ3oO_vgo4TJrIY2x4MK28MTg9rIiNjWS3fhjg4fbH29G8ul-Dg8jNc895stLEHaneIi0mS1akpHRvJzoGhfsl0z47jDcbritfuFbE10_8v5iu3j1sk7i6O08T49W0KZXbipYgjMJn74gzOKAW4eRCQ7ghabASRZTGOC1hAn9bdOit_FTmlxIap4_2by2z9hcmsR-nyd0YGG_weT8Kik4zV0AYF6czsjfECyOfZk0FKa7VoF3cOc" width={40} height={40} />
                     </button>
                 </div>
             </div>

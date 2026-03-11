@@ -238,6 +238,5 @@ After making changes, run these to validate:
 
 - Dead code to clean up: `useSectionData.ts`, `useSectionDataSwr.ts`, `HomeV2 plainHtml.tsx`
 - Some remaining ESLint errors to fix
-- HomeV2 search, icons, and spacing need polish
 - Dark mode toggle on HomeV2 needs verification
 - `ThemeProvider` localStorage persistence is dev-only (not yet enabled for production)

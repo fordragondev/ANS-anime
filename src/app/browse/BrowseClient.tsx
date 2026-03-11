@@ -20,7 +20,7 @@ import { useState, useMemo } from 'react';
 import Link from 'next/link';
 import { Filter } from 'lucide-react';
 import { AnimeItem, AnimeType } from '@/types/anime';
-import { filterAnimeByType, getUniqueTypes, getTypeBadgeColor } from '@/lib/utils';
+import { filterAnimeByType, getTypeBadgeColor } from '@/lib/utils';
 import { ANIME_TYPES } from '@/lib/constants';
 import { SubPageHeader } from '@/components/SubPageHeader';
 
@@ -35,9 +35,6 @@ export default function BrowseClient({ initialData }: BrowseClientProps) {
   // Client state for interactivity
   const [selectedType, setSelectedType] = useState<AnimeType>('All');
   const [displayCount, setDisplayCount] = useState(ITEMS_PER_PAGE);
-
-  // Get available types from data
-  const availableTypes = useMemo(() => getUniqueTypes(initialData), [initialData]);
 
   // Filter data client-side (instant, no server request)
   const filteredData = useMemo(

@@ -1,6 +1,6 @@
 'use client';
 
-import { createContext, use, useEffect, useState } from 'react';
+import { createContext, use, useEffect, useState, useSyncExternalStore, useCallback } from 'react';
 
 type Theme = 'light' | 'dark' | 'system';
 
@@ -13,21 +13,26 @@ interface ThemeContextType {
 
 const ThemeContext = createContext<ThemeContextType | null>(null);
 
-export function ThemeProvider({ children }: { children: React.ReactNode }) {
-  const [theme, setTheme] = useState<Theme>('system');
-  const [mounted, setMounted] = useState(false);
+// Subscribe to a no-op store — we only need the server/client snapshot distinction
+const emptySubscribe = () => () => { };
 
-  // Client-only mount detection — required for SSR/hydration in Next.js.
-  useEffect(() => {
-    setMounted(true);
-    // Load theme from localStorage (dev only)
-    if (process.env.NODE_ENV === 'development') {
+export function ThemeProvider({ children }: { children: React.ReactNode }) {
+  // useSyncExternalStore: server always returns false, client returns true.
+  // Avoids the "setState in useEffect" lint error for mount detection.
+  const mounted = useSyncExternalStore(
+    emptySubscribe,
+    () => true,  // client snapshot
+    () => false  // server snapshot
+  );
+
+  const [theme, setTheme] = useState<Theme>(() => {
+    // Lazy initializer: reads from localStorage on the client only
+    if (typeof window !== 'undefined' && process.env.NODE_ENV === 'development') {
       const stored = localStorage.getItem('theme') as Theme;
-      if (stored) {
-        setTheme(stored);
-      }
+      if (stored) return stored;
     }
-  }, []);
+    return 'system';
+  });
 
   // Determine if dark mode should be active
   const isDark = mounted && (() => {
@@ -59,7 +64,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
     }
   }, [theme, mounted]);
 
-  const toggleDarkMode = () => {
+  const toggleDarkMode = useCallback(() => {
     setTheme(prev => {
       if (prev === 'dark') return 'light';
       if (prev === 'light') return 'dark';
@@ -67,7 +72,7 @@ export function ThemeProvider({ children }: { children: React.ReactNode }) {
       const currentlyDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
       return currentlyDark ? 'light' : 'dark';
     });
-  };
+  }, []);
 
   return (
     <ThemeContext.Provider value={{ theme, setTheme, isDark, toggleDarkMode }}>
