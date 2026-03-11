@@ -1,4 +1,5 @@
 import React from "react";
+import { Clapperboard } from 'lucide-react';
 
 export function FooterV2() {
     return (
@@ -7,7 +8,7 @@ export function FooterV2() {
                 <div className="flex flex-col md:flex-row justify-between items-center gap-8">
                     <div className="flex items-center gap-2">
                         <div className="flex h-10 w-10 items-center justify-center rounded bg-v2-primary text-white">
-                            <span className="material-symbols-outlined text-[24px]">movie_filter</span>
+                            <Clapperboard size={24} />
                         </div>
                         <span className="text-xl font-bold text-white tracking-tight">Anime News Hub</span>
                     </div>

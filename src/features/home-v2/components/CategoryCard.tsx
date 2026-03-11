@@ -2,6 +2,7 @@
 
 import React, { createContext, use } from "react";
 import Image from "next/image";
+import { Bookmark } from 'lucide-react';
 
 type CategoryCardContextValue = {
     data: {
@@ -39,7 +40,7 @@ function CategoryCardHero() {
             />
             <div className="absolute inset-0 bg-gradient-to-t from-v2-background-dark via-transparent to-transparent"></div>
             <button className="absolute top-4 right-4 z-10 text-white/70 hover:text-v2-primary transition-colors">
-                <span className="material-symbols-outlined">bookmark</span>
+                <Bookmark size={20} />
             </button>
             <div className="absolute bottom-4 left-4 pr-4">
                 <span className="text-[10px] font-bold text-v2-primary uppercase block mb-1">{data.title}</span>

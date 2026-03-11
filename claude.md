@@ -236,7 +236,7 @@ After making changes, run these to validate:
 
 ### Known Issues & TODOs
 
-- Dead code to clean up: `useSectionData.ts`, `useSectionDataSwr.ts`, `HomeV2 plainHtml.tsx`, empty `components/v2/` and `components/sections/`
+- Dead code to clean up: `useSectionData.ts`, `useSectionDataSwr.ts`, `HomeV2 plainHtml.tsx`
 - Some remaining ESLint errors to fix
 - HomeV2 search, icons, and spacing need polish
 - Dark mode toggle on HomeV2 needs verification

@@ -2,6 +2,7 @@
 
 import React, { createContext, use } from "react";
 import Image from "next/image";
+import { Bookmark, Calendar, ThumbsUp } from 'lucide-react';
 
 // Combine everything a NewsCard needs access to
 type NewsCardContextValue = {
@@ -103,12 +104,12 @@ function NewsCardMeta() {
         <div className="flex items-center gap-4 text-sm text-slate-400">
             {data.vintage && (
                 <span className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[16px]">calendar_month</span> {data.vintage}
+                    <Calendar size={16} /> {data.vintage}
                 </span>
             )}
             {data.votes !== undefined && (
                 <span className="flex items-center gap-1">
-                    <span className="material-symbols-outlined text-[16px]">thumbs_up_down</span> {data.votes} votes
+                    <ThumbsUp size={16} /> {data.votes} votes
                 </span>
             )}
         </div>
@@ -118,7 +119,7 @@ function NewsCardMeta() {
 function NewsCardBookmark({ className = "" }: { className?: string }) {
     return (
         <button className={`absolute text-slate-500 hover:text-v2-primary transition-colors ${className}`}>
-            <span className="material-symbols-outlined text-[24px]">bookmark</span>
+            <Bookmark size={24} />
         </button>
     );
 }

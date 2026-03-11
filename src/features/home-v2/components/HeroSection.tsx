@@ -2,6 +2,7 @@
 
 import React from "react";
 import Image from "next/image";
+import { Bookmark, Calendar, ThumbsUp } from 'lucide-react';
 import { AnimeDetailItem } from "@/types/anime";
 
 export function HeroSection({ featured }: { featured: AnimeDetailItem }) {
@@ -20,7 +21,7 @@ export function HeroSection({ featured }: { featured: AnimeDetailItem }) {
                 <div className="absolute inset-0 bg-gradient-to-t from-v2-background-dark via-v2-background-dark/30 to-transparent"></div>
                 <div className="absolute top-4 right-4 z-10">
                     <button className="h-10 w-10 rounded-full bg-black/40 backdrop-blur-md flex items-center justify-center text-white hover:text-v2-primary transition-colors">
-                        <span className="material-symbols-outlined">bookmark</span>
+                        <Bookmark size={20} />
                     </button>
                 </div>
                 <div className="absolute bottom-0 left-0 p-6 sm:p-8 w-full">
@@ -35,10 +36,10 @@ export function HeroSection({ featured }: { featured: AnimeDetailItem }) {
                     </p>
                     <div className="flex items-center gap-4 text-sm text-slate-400">
                         <span className="flex items-center gap-1">
-                            <span className="material-symbols-outlined text-[16px]">calendar_month</span> {featured.vintage}
+                            <Calendar size={16} /> {featured.vintage}
                         </span>
                         <span className="flex items-center gap-1">
-                            <span className="material-symbols-outlined text-[16px]">thumbs_up_down</span> {featured.voteCount} votes
+                            <ThumbsUp size={16} /> {featured.voteCount} votes
                         </span>
                     </div>
                 </div>
