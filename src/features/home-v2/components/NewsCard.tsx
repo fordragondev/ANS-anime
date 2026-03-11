@@ -3,6 +3,7 @@
 import React, { createContext, use } from "react";
 import Image from "next/image";
 import { Bookmark, Calendar, ThumbsUp } from 'lucide-react';
+import { sanitizeHtml } from "@/lib/utils";
 
 // Combine everything a NewsCard needs access to
 type NewsCardContextValue = {
@@ -90,9 +91,9 @@ function NewsCardExcerpt({ className = "" }: { className?: string }) {
     if (!data.excerpt) return null;
 
     return (
-        <p className={`text-slate-400 text-sm line-clamp-2 leading-relaxed ${className}`}>
-            {data.excerpt}
-        </p>
+        <p className={`text-slate-400 text-sm line-clamp-2 leading-relaxed ${className}`}
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(data.excerpt) }}
+        />
     );
 }
 

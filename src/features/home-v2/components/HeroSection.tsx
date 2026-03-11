@@ -4,6 +4,7 @@ import React from "react";
 import Image from "next/image";
 import { Bookmark, Calendar, ThumbsUp } from 'lucide-react';
 import { AnimeDetailItem } from "@/types/anime";
+import { sanitizeHtml } from "@/lib/utils";
 
 export function HeroSection({ featured }: { featured: AnimeDetailItem }) {
     if (!featured) return null;
@@ -31,9 +32,9 @@ export function HeroSection({ featured }: { featured: AnimeDetailItem }) {
                     <h1 className="mb-3 text-2xl font-bold leading-tight text-white sm:text-4xl">
                         {featured.name}
                     </h1>
-                    <p className="mb-4 max-w-2xl text-slate-300 line-clamp-2 sm:line-clamp-3">
-                        {featured.description}
-                    </p>
+                    <p className="mb-4 max-w-2xl text-slate-300 line-clamp-2 sm:line-clamp-3"
+                        dangerouslySetInnerHTML={{ __html: sanitizeHtml(featured.description) }}
+                    />
                     <div className="flex items-center gap-4 text-sm text-slate-400">
                         <span className="flex items-center gap-1">
                             <Calendar size={16} /> {featured.vintage}

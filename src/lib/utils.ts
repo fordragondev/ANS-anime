@@ -90,3 +90,14 @@ export function getTypeBadgeStyles(type: string): { colorClass: string; bgClass:
   const { colorClass, bgClass } = resolveTypeColors(type);
   return { colorClass, bgClass };
 }
+
+/**
+ * Sanitize HTML from API responses — only allows safe inline formatting tags.
+ * Strips everything except: <i>, <b>, <em>, <strong>, <br>
+ * Use with dangerouslySetInnerHTML to render italic/bold text from the ANN API.
+ */
+export function sanitizeHtml(html: string): string {
+  if (!html) return '';
+  // Remove all tags except whitelisted inline formatting tags
+  return html.replace(/<\/?(?!(?:i|b|em|strong|br)\b)[^>]*>/gi, '');
+}

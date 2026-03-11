@@ -4,7 +4,7 @@ import Link from 'next/link';
 import Image from 'next/image';
 import { Settings, Bookmark } from 'lucide-react';
 import { AnimeDetailItem } from '@/types/anime';
-import { formatDate, getImageUrl, isPlaceholderImage } from '@/lib/utils';
+import { formatDate, getImageUrl, isPlaceholderImage, sanitizeHtml } from '@/lib/utils';
 import FilterDropdown from '@/components/FilterDropdown';
 
 interface LatestNewsProps {
@@ -66,9 +66,9 @@ function NewsItem({ anime }: { anime: AnimeDetailItem }) {
           </div>
 
           {/* Description */}
-          <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
-            {anime.description}
-          </p>
+          <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2"
+            dangerouslySetInnerHTML={{ __html: sanitizeHtml(anime.description) }}
+          />
 
           {/* Rating */}
           {anime.rating > 0 && (
